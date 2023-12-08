@@ -1,4 +1,5 @@
 #include "emmy.hpp"
+#include "imgui.h"
 
 namespace Noether {
     void Editor::Initialise() {
@@ -18,7 +19,7 @@ namespace Noether {
     }
 
     void Editor::DrawGUI() {
-
+        ImGui::ShowDemoWindow();
     }
 
     void Editor::OnEvent() {

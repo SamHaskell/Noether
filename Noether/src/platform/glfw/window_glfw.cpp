@@ -4,7 +4,7 @@ static bool s_GLFWInitialised = false;
 static bool s_FrameInProgress = false;
 
 namespace Noether {
-    WindowGLFW::WindowGLFW() {
+    WindowGLFW::WindowGLFW(const WindowSpec& spec) {
         if (!s_GLFWInitialised) {
             i32 init_ok = glfwInit();
             NT_ASSERT(init_ok == GLFW_TRUE, "GLFW failed to initialise.");
@@ -19,8 +19,8 @@ namespace Noether {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
         m_WindowHandle = glfwCreateWindow(
-            1280, 720,
-            "Noether Application",
+            spec.Width, spec.Height,
+            spec.Title.c_str(),
             NULL, NULL
         );
 

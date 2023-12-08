@@ -2,7 +2,7 @@
 #include "platform/glfw/window_glfw.hpp"
 
 namespace Noether {
-    std::shared_ptr<Window> Window::Create() {
-        return std::make_shared<WindowGLFW>();
+    std::shared_ptr<Window> Window::Create(const WindowSpec& spec) {
+        return std::make_shared<WindowGLFW>(spec);
     }
 }

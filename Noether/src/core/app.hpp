@@ -2,6 +2,7 @@
 
 #include "core/clock.hpp"
 #include "core/window.hpp"
+#include "graphics/graphicsdevice.hpp"
 
 namespace Noether {
     class App {
@@ -21,6 +22,7 @@ namespace Noether {
 
         private:
             std::shared_ptr<Window> m_Window;
+            std::shared_ptr<GraphicsDevice> m_GraphicsDevice;
 
             bool m_Running;
             Clock m_AppClock;

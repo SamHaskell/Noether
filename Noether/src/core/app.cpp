@@ -3,7 +3,14 @@
 namespace Noether {
     void App::Run() {
 
-        m_Window = Window::Create();
+        WindowSpec windowSpec = {
+            .Width = 1280,
+            .Height = 720,
+            .Title = "Noether Application"
+        };
+
+        m_Window = Window::Create(windowSpec);
+        m_GraphicsDevice = GraphicsDevice::Create(m_Window);
 
         Initialise();
 
@@ -20,11 +27,15 @@ namespace Noether {
 
     void App::Tick() {
         f64 dt = m_AppClock.Tick();
-
+        
         Update();
+
+        m_GraphicsDevice->Clear();
 
         Render();
 
+        m_GraphicsDevice->BeginGUI();
         DrawGUI();
+        m_GraphicsDevice->EndGUI();
     }
 };
