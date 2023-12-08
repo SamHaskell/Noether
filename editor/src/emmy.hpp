@@ -14,6 +14,6 @@ namespace Noether {
             void Update() override;
             void Render() override;
             void DrawGUI() override;
-            void OnEvent() override;
+            void OnEvent(Event& e) override;
     };
 };

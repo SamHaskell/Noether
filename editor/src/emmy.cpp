@@ -22,7 +22,7 @@ namespace Noether {
         ImGui::ShowDemoWindow();
     }
 
-    void Editor::OnEvent() {
+    void Editor::OnEvent(Event& e) {
 
     }
 

@@ -6,7 +6,8 @@ namespace Noether {
         WindowSpec windowSpec = {
             .Width = 1280,
             .Height = 720,
-            .Title = "Noether Application"
+            .Title = "Noether Application",
+            .EventCallback = std::bind(&App::HandleEvent, this, std::placeholders::_1)
         };
 
         m_Window = Window::Create(windowSpec);
@@ -23,6 +24,21 @@ namespace Noether {
         }
 
         Shutdown();
+    }
+
+    void App::HandleEvent(Event& e) {
+        switch (e.Type) {
+            case Event::Type::WindowClose:
+            {
+                m_Running = false;
+                e.Handled = true;
+                break;
+            }
+        }
+
+        if (!e.Handled) {
+            OnEvent(e);
+        }
     }
 
     void App::Tick() {

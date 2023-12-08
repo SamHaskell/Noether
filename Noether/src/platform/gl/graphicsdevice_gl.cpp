@@ -2,6 +2,7 @@
 #include "platform/gl/graphicsutils_gl.hpp"
 
 #include "GLFW/glfw3.h"
+
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
@@ -9,12 +10,11 @@
 namespace Noether {
     GraphicsDeviceGL::GraphicsDeviceGL(std::shared_ptr<Window> window) {
         auto windowHandle = (GLFWwindow*)window->GetNativeHandle();
+        glfwMakeContextCurrent(windowHandle);
 
 #ifndef PLATFORM_WEB
         gladLoadGL();
 #endif
-
-        glfwMakeContextCurrent(windowHandle);
 
         glEnable(GL_DEPTH_TEST); GL_LOG_ERROR;
         glDepthFunc(GL_LESS); GL_LOG_ERROR;

@@ -11,6 +11,7 @@ namespace Noether {
             virtual ~App() = default;
 
             void Run();
+            void HandleEvent(Event& e);
 
             virtual void Initialise() = 0;
             virtual void Shutdown() = 0;
@@ -18,7 +19,7 @@ namespace Noether {
             virtual void Update() = 0;
             virtual void Render() = 0;
             virtual void DrawGUI() = 0;
-            virtual void OnEvent() = 0;
+            virtual void OnEvent(Event& e) = 0;
 
         private:
             std::shared_ptr<Window> m_Window;
