@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/clock.hpp"
+#include "core/window.hpp"
 
 namespace Noether {
     class App {
@@ -19,6 +20,8 @@ namespace Noether {
             virtual void OnEvent() = 0;
 
         private:
+            std::shared_ptr<Window> m_Window;
+
             bool m_Running;
             Clock m_AppClock;
 

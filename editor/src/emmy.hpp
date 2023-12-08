@@ -1,5 +1,7 @@
 #pragma once
 
+#include "noether.hpp"
+
 namespace Noether {
     class Editor : public App {
         public:

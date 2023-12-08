@@ -23,6 +23,9 @@ project "noether"
         "vendor/stb/stb_image.h",
         "vendor/stb/stb_image_write.h",
 
+        -- json
+        "vendor/json/json.hpp",
+
         -- tinygltf
         "vendor/tiny/tiny_impl.cpp",
         "vendor/tiny/tiny_gltf.h",
@@ -44,6 +47,10 @@ project "noether"
         "vendor/glad/include",
     }
 
+    links {
+        "glfw"
+    }
+
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
     objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
 
@@ -63,3 +70,6 @@ project "noether"
         runtime "Release"
         optimize "On"
         symbols "Off"
+
+    filter "system:macosx"
+        defines { "PLATFORM_MAC" }

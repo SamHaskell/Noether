@@ -16,7 +16,8 @@ project "emmy"
     }
 
     links {
-        "noether"
+        "noether",
+        "glfw"
     }
 
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

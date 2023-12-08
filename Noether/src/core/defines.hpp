@@ -119,6 +119,7 @@ inline void CoreLog(LogLevel verbosity, const char *msg, const char *file, i32 l
     va_start(p_args, line);
     vsnprintf(output, buffer_size, msg, p_args);
     va_end(p_args);
+    
 #ifdef PLATFORM_WEB
     printf("%s%-7s: %s Line: %i\n%-9s%s%s\n", logLevelColors[verbosity], logLevelLabels[verbosity], file, line, "", output, "");
 #else
