@@ -7,7 +7,8 @@ namespace Noether {
             .Width = 1280,
             .Height = 720,
             .Title = "Noether Application",
-            .EventCallback = std::bind(&App::HandleEvent, this, std::placeholders::_1)
+            .EventCallback = std::bind(&App::HandleEvent, this, std::placeholders::_1),
+            .Mode = DisplayMode::Windowed
         };
 
         m_Window = Window::Create(windowSpec);
@@ -19,7 +20,6 @@ namespace Noether {
         m_AppClock.Start();
 
         while (m_Running) {
-            m_Window->NewFrame();
             Tick();
         }
 
@@ -34,6 +34,8 @@ namespace Noether {
                 e.Handled = true;
                 break;
             }
+            default:
+                break;
         }
 
         if (!e.Handled) {
@@ -43,15 +45,19 @@ namespace Noether {
 
     void App::Tick() {
         f64 dt = m_AppClock.Tick();
+        m_Window->NewFrame();
         
         Update();
 
         m_GraphicsDevice->Clear();
+        {
+            Render();
 
-        Render();
-
-        m_GraphicsDevice->BeginGUI();
-        DrawGUI();
-        m_GraphicsDevice->EndGUI();
+            m_GraphicsDevice->BeginGUI();
+            {
+                DrawGUI();
+            }
+            m_GraphicsDevice->EndGUI();
+        }
     }
 };

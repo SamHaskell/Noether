@@ -6,8 +6,16 @@
 namespace Noether {
     struct KeyEvent
     {
-        KeyCode::Key Key;
-        KeyMod::Key Mod;
+        KeyCode Key;
+        i32 Mods;
+        bool IsDown;
+        bool IsRepeat;
+    };
+
+    struct MouseButtonEvent
+    {
+        MouseButton Button;
+        i32 Mods;
         bool IsDown;
     };
 
@@ -49,6 +57,7 @@ namespace Noether {
 
         union {
             KeyEvent KeyPress;
+            MouseButtonEvent MouseButton;
             MouseMovementEvent MouseMovement;
             WindowCloseEvent WindowClose;
             WindowBackbufferSizeEvent WindowBackbufferSize;

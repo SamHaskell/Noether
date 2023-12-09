@@ -23,13 +23,37 @@ namespace Noether {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
+        glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
+        auto monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+        i32 chosenWidth, chosenHeight;
+        GLFWmonitor* chosenMonitor;
+
+        switch (spec.Mode) {
+            case DisplayMode::Windowed:
+                chosenWidth = spec.Width;
+                chosenHeight = spec.Height;
+                glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+                break;
+            case DisplayMode::WindowedFullscreen:
+                chosenWidth = mode->width;
+                chosenHeight = mode->height;
+                glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+                break;
+            case DisplayMode::Fullscreen:
+                chosenMonitor = monitor;
+                break;
+        }
+
         m_WindowHandle = glfwCreateWindow(
-            spec.Width, spec.Height,
+            chosenWidth, chosenHeight,
             spec.Title.c_str(),
-            NULL, NULL
+            chosenMonitor, NULL
         );
 
         glfwGetWindowSize(m_WindowHandle, &m_WindowState.Width, &m_WindowState.Height);
@@ -67,7 +91,13 @@ namespace Noether {
     static void glfw_key_callback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods) {
         auto state = (WindowStateGLFW*)glfwGetWindowUserPointer(window);
         Event e = {
-            .Type = Event::Type::Key
+            .Type = Event::Type::Key,
+            .KeyPress = {
+                .Key = KeyCode(key),
+                .Mods = mods,
+                .IsDown = (action == GLFW_RELEASE) ? false : true,
+                .IsRepeat = (action == GLFW_REPEAT) ? true : false
+            }
         };
         state->EventCallback(e);
     }
@@ -75,7 +105,12 @@ namespace Noether {
     static void glfw_mouse_button_callback(GLFWwindow* window, i32 button, i32 action, i32 mods) {
         auto state = (WindowStateGLFW*)glfwGetWindowUserPointer(window);
         Event e = {
-            .Type = Event::Type::MouseButton
+            .Type = Event::Type::MouseButton,
+            .MouseButton = {
+                .Button = MouseButton(button),
+                .Mods = mods,
+                .IsDown = (action == GLFW_RELEASE) ? false : true
+            }
         };
         state->EventCallback(e);
     }
@@ -83,25 +118,40 @@ namespace Noether {
     static void glfw_mouse_move_callback(GLFWwindow* window, f64 xpos, f64 ypos) {
         auto state = (WindowStateGLFW*)glfwGetWindowUserPointer(window);
         Event e = {
-            .Type = Event::Type::MouseMovement
+            .Type = Event::Type::MouseMovement,
+            .MouseMovement = {
+                .X = xpos,
+                .Y = ypos
+            }
         };
         state->EventCallback(e);
     }
 
     static void glfw_window_size_callback(GLFWwindow* window, i32 width, i32 height) {
         auto state = (WindowStateGLFW*)glfwGetWindowUserPointer(window);
+        state->Width = width;
+        state->Height = height;
         Event e = {
-            .Type = Event::Type::WindowSize
+            .Type = Event::Type::WindowSize,
+            .WindowSize = {
+                .Width = width,
+                .Height = height
+            }
         };
         state->EventCallback(e);
     }
 
     static void glfw_backbuffer_size_callback(GLFWwindow* window, i32 width, i32 height) {
         auto state = (WindowStateGLFW*)glfwGetWindowUserPointer(window);
+        state->BackbufferWidth = width;
+        state->BackbufferHeight = height;
         Event e = {
-            .Type = Event::Type::WindowBackbufferSize
+            .Type = Event::Type::WindowBackbufferSize,
+            .WindowBackbufferSize = {
+                .Width = width,
+                .Height = height
+            }
         };
         state->EventCallback(e);
     }
-
 }
