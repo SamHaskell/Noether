@@ -4,7 +4,6 @@
 namespace Noether {
     void Editor::Initialise() {
         GetGraphicsDevice()->SetVSync(false);
-
         auto window = GetMainWindow();
         m_MultisampledFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 4);
         m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);

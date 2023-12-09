@@ -1,11 +1,10 @@
 project "glfw"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
-	warnings "off"
+	-- warnings "off"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. OutputDir .. "/%{prj.name}")
+	objdir ("bin-int/" .. OutputDir .. "/%{prj.name}")
 
 	files
 	{
@@ -53,8 +52,6 @@ project "glfw"
 		}
 
 	filter "system:macosx"
-		pic "On"
-
 		files
 		{
 			"src/cocoa_init.m",
@@ -98,7 +95,7 @@ project "glfw"
 		}
 
 	filter "configurations:Debug"
-		runtime "Debug"
+		runtime "Release"
 		symbols "on"
 
 	filter { "system:windows", "configurations:Debug-AS" }	

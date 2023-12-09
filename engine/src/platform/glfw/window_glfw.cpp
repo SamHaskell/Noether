@@ -1,7 +1,6 @@
 #include "platform/glfw/window_glfw.hpp"
 
 static bool s_GLFWInitialised = false;
-static bool s_FrameInProgress = false;
 
 namespace Noether {
 
@@ -50,11 +49,17 @@ namespace Noether {
                 break;
         }
 
+        NT_INFO("Hello");
+
         m_WindowHandle = glfwCreateWindow(
             chosenWidth, chosenHeight,
             spec.Title.c_str(),
             chosenMonitor, NULL
         );
+
+        NT_ASSERT(m_WindowHandle != NULL, "GLFW Failed to create a Window!");
+
+        NT_INFO("Again!");
 
         glfwGetWindowSize(m_WindowHandle, &m_WindowState.Width, &m_WindowState.Height);
         glfwGetFramebufferSize(m_WindowHandle, &m_WindowState.BackbufferWidth, &m_WindowState.BackbufferHeight);

@@ -3,7 +3,6 @@ project "noether"
     language "C++"
     cppdialect "C++20"
     targetdir "bin/%{cfg.buildcfg}"
-    staticruntime "off"
 
     files { 
         -- project
@@ -48,7 +47,7 @@ project "noether"
     }
 
     links {
-        "glfw"
+        "glfw",
     }
 
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

@@ -24,9 +24,14 @@ project "emmy"
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
     objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
 
-    filter "system:windows"
+    filter "system:macosx"
         systemversion "latest"
-        defines { "WINDOWS" }
+        defines { "PLATFORM_MAC" }
+        links {
+            "Cocoa.framework",
+            "IOKit.framework",
+            "OpenGL.framework"
+        }
 
     filter "configurations:Debug"
         defines { "DEBUG" }
