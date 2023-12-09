@@ -3,6 +3,8 @@
 
 namespace Noether {
     void Editor::Initialise() {
+        GetGraphicsDevice()->SetVSync(false);
+
         auto window = GetMainWindow();
         m_Framebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight());
 
@@ -147,7 +149,7 @@ namespace Noether {
 
         m_GroundTransform = {
             .Position = {0.0f, -30.0f, 0.0f},
-            .Scale = {1000.0f, 1.0f, 1000.0f}
+            .Scale = {10000.0f, 1.0f, 10000.0f}
         };
 
     }
@@ -173,7 +175,7 @@ namespace Noether {
 
         f32 aspect = (f32)GetMainWindow()->GetBackbufferWidth() / (f32)GetMainWindow()->GetBackbufferHeight();
 
-        Mat4 proj = Matrix4::Perspective(90.0f, aspect, 0.1f, 1000.0f);
+        Mat4 proj = Matrix4::Perspective(60.0f, aspect, 0.1f, 10000.0f);
 
         // Skybox!
 
@@ -307,7 +309,11 @@ namespace Noether {
     void Editor::OnEvent(Event& e) {
         switch (e.Type) {
             case Event::Type::WindowBackbufferSize:
+            {
                 m_Framebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
+                break;
+            }
+            default:
                 break;
         }
     }

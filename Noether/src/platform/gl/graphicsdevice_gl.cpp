@@ -11,6 +11,7 @@ namespace Noether {
     GraphicsDeviceGL::GraphicsDeviceGL(std::shared_ptr<Window> window) {
         auto windowHandle = (GLFWwindow*)window->GetNativeHandle();
         glfwMakeContextCurrent(windowHandle);
+        glfwSwapInterval(0);
 
 #ifndef PLATFORM_WEB
         gladLoadGL();
@@ -62,6 +63,10 @@ namespace Noether {
 
     void GraphicsDeviceGL::SetDepthTesting(bool isActive) const {
         (isActive) ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE); GL_LOG_ERROR;
+    }
+
+    void GraphicsDeviceGL::SetVSync(bool isActive) const {
+        glfwSwapInterval((isActive) ? 1 : 0);
     }
 
     void GraphicsDeviceGL::SetViewport(i32 width, i32 height) const {
