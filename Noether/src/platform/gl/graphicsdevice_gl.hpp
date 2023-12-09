@@ -16,6 +16,8 @@ namespace Noether {
             void SetVSync(bool isActive) const override;
             void SetViewport(i32 width, i32 height) const override;
 
+            void Blit(std::shared_ptr<FrameBuffer> src, std::shared_ptr<FrameBuffer> dst, IRect2D srcRect, IRect2D dstRect) override;
+
             void BeginGUI() const override;
             void EndGUI() const override;
         

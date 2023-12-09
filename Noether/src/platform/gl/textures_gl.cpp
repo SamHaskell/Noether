@@ -19,18 +19,29 @@ namespace Noether {
         stbi_image_free(data);
     }
 
-    Texture2DGL::Texture2DGL(i32 width, i32 height) {
+    Texture2DGL::Texture2DGL(i32 width, i32 height, u32 samples) {
         m_Width = width;
         m_Height = height;
         m_Channels = 4;
+        m_Samples = samples;
     
         glGenTextures(1, &m_RendererID); GL_LOG_ERROR;
-        glBindTexture(GL_TEXTURE_2D, m_RendererID); GL_LOG_ERROR;
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); GL_LOG_ERROR;
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
 
-        glBindTexture(GL_TEXTURE_2D, 0); GL_LOG_ERROR;
+        if (samples == 0) {
+            glBindTexture(GL_TEXTURE_2D, m_RendererID); GL_LOG_ERROR;
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
+            glBindTexture(GL_TEXTURE_2D, 0); GL_LOG_ERROR;
+        } else {
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_RendererID); GL_LOG_ERROR;
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA, m_Width, m_Height, GL_TRUE); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0); GL_LOG_ERROR; 
+        }
+
+
     }
 
     Texture2DGL::~Texture2DGL() {

@@ -6,7 +6,7 @@ namespace Noether {
     class Texture2D {
         public:
             static std::shared_ptr<Texture2D> Create(const std::string& path);
-            static std::shared_ptr<Texture2D> Create(i32 width, i32 height);
+            static std::shared_ptr<Texture2D> Create(i32 width, i32 height, u32 samples = 0);
             virtual ~Texture2D() = default;
 
             virtual void Bind(u32 unit = 0) = 0;

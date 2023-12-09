@@ -6,7 +6,8 @@ namespace Noether {
         GetGraphicsDevice()->SetVSync(false);
 
         auto window = GetMainWindow();
-        m_Framebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight());
+        m_MultisampledFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 4);
+        m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);
 
         m_TestMesh = Mesh::Load("assets/models/f22.obj");
         m_CubeMesh = Mesh::Load("assets/models/cube.obj");
@@ -166,7 +167,7 @@ namespace Noether {
     void Editor::Render() {
         // Bind the framebuffer
 
-        m_Framebuffer->Bind();
+        m_MultisampledFramebuffer->Bind();
         GetGraphicsDevice()->Clear();
 
         // Set up camera.
@@ -244,14 +245,19 @@ namespace Noether {
             }
         }
 
-        // Unbind the framebuffer
-
-        m_Framebuffer->Unbind();
-
         // Blit the framebuffer onto the screen
 
+        IRect2D screenRect = {
+            0, 0, GetMainWindow()->GetBackbufferWidth(), GetMainWindow()->GetBackbufferHeight()
+        };
+
+        GetGraphicsDevice()->Blit(m_MultisampledFramebuffer, m_ResolvedFramebuffer, screenRect, screenRect);
+
+        m_MultisampledFramebuffer->Unbind();
+        m_ResolvedFramebuffer->Unbind();
+
         m_BlitShader->Bind();
-        m_Framebuffer->GetColorAttachment()->Bind();
+        m_ResolvedFramebuffer->GetColorAttachment()->Bind();
         GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
     }
 
@@ -310,7 +316,8 @@ namespace Noether {
         switch (e.Type) {
             case Event::Type::WindowBackbufferSize:
             {
-                m_Framebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
+                m_MultisampledFramebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
+                m_ResolvedFramebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
                 break;
             }
             default:

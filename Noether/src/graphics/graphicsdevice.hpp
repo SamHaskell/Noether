@@ -3,6 +3,8 @@
 #include "core/defines.hpp"
 #include "core/window.hpp"
 #include "graphics/buffers.hpp"
+#include "graphics/framebuffer.hpp"
+#include "maths/maths.hpp"
 
 namespace Noether {
     using ClearFlags = u32;
@@ -23,6 +25,8 @@ namespace Noether {
             virtual void SetDepthTesting(bool isActive) const = 0;
             virtual void SetViewport(i32 width, i32 height) const = 0;
             virtual void SetVSync(bool isActive) const = 0;
+
+            virtual void Blit(std::shared_ptr<FrameBuffer> src, std::shared_ptr<FrameBuffer> dst, IRect2D srcRect, IRect2D dstRect) = 0;
 
             virtual void BeginGUI() const = 0;
             virtual void EndGUI() const = 0;

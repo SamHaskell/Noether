@@ -7,6 +7,8 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
+#include "platform/gl/framebuffer_gl.hpp"
+
 namespace Noether {
     GraphicsDeviceGL::GraphicsDeviceGL(std::shared_ptr<Window> window) {
         auto windowHandle = (GLFWwindow*)window->GetNativeHandle();
@@ -28,6 +30,8 @@ namespace Noether {
         glCullFace(GL_BACK); GL_LOG_ERROR;
 
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); GL_LOG_ERROR;
+
+        glEnable(GL_MULTISAMPLE);
 
         glClearColor(0.1, 0.1, 0.12, 1.0); GL_LOG_ERROR;
 
@@ -70,7 +74,21 @@ namespace Noether {
     }
 
     void GraphicsDeviceGL::SetViewport(i32 width, i32 height) const {
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height); GL_LOG_ERROR;
+    }
+
+    void GraphicsDeviceGL::Blit(std::shared_ptr<FrameBuffer> src, std::shared_ptr<FrameBuffer> dst, IRect2D srcRect, IRect2D dstRect) {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, std::dynamic_pointer_cast<FrameBufferGL>(src)->GetRendererID()); GL_LOG_ERROR;
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, std::dynamic_pointer_cast<FrameBufferGL>(dst)->GetRendererID()); GL_LOG_ERROR;
+
+        glBlitFramebuffer(
+            srcRect.x, srcRect.y,
+            srcRect.w, srcRect.h,
+            dstRect.x, dstRect.y,
+            dstRect.w, dstRect.h,
+            GL_COLOR_BUFFER_BIT,
+            GL_NEAREST
+        ); GL_LOG_ERROR;
     }
 
     void GraphicsDeviceGL::BeginGUI() const {

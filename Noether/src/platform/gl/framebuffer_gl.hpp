@@ -5,7 +5,7 @@
 namespace Noether {
     class FrameBufferGL : public FrameBuffer {
         public:
-            FrameBufferGL(u32 width, u32 height);
+            FrameBufferGL(u32 width, u32 height, u32 samples);
             ~FrameBufferGL();
 
             virtual std::shared_ptr<Texture2D> GetColorAttachment() override;
@@ -14,6 +14,8 @@ namespace Noether {
 
             virtual void Bind() override;
             virtual void Unbind() override;
+
+            inline u32 GetRendererID() { return m_RendererID; }
         
         private:
             u32 m_RendererID;

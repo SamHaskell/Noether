@@ -3,7 +3,7 @@
 #include "platform/gl/textures_gl.hpp"
 
 namespace Noether {
-    FrameBufferGL::FrameBufferGL(u32 width, u32 height) {
+    FrameBufferGL::FrameBufferGL(u32 width, u32 height, u32 samples = 0) {
         glGenFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         
@@ -13,19 +13,27 @@ namespace Noether {
         //  - All attachments should have some reserved memory on GPU
         //  - Each buffer should have the same number of samples
 
-        m_ColorAttachment = Texture2D::Create(width, height);
+        m_ColorAttachment = Texture2D::Create(width, height, samples);
+
+        GLenum target = (samples == 0) ? GL_TEXTURE_2D : GL_TEXTURE_2D_MULTISAMPLE;
 
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, 
             GL_COLOR_ATTACHMENT0, 
-            GL_TEXTURE_2D, 
+            target, 
             std::static_pointer_cast<Texture2DGL>(m_ColorAttachment)->GetRendererID(), 
             0
         ); GL_LOG_ERROR;
 
         glGenRenderbuffers(1, &m_DepthAttachment); GL_LOG_ERROR;
         glBindRenderbuffer(GL_RENDERBUFFER, m_DepthAttachment); GL_LOG_ERROR;
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); GL_LOG_ERROR;
+
+        if (samples == 0) {
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); GL_LOG_ERROR;
+        } else {
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, width, height); GL_LOG_ERROR;
+        }
+        
         glBindRenderbuffer(GL_RENDERBUFFER, 0); GL_LOG_ERROR;
 
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_DepthAttachment); GL_LOG_ERROR;

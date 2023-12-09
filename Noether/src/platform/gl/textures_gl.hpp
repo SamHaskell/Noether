@@ -7,7 +7,7 @@ namespace Noether {
     class Texture2DGL : public Texture2D {
         public:
             Texture2DGL(const std::string& path);
-            Texture2DGL(i32 width, i32 height);
+            Texture2DGL(i32 width, i32 height, u32 samples = 0);
             ~Texture2DGL();
 
             inline void Bind(u32 unit = 0) override { 
@@ -18,9 +18,11 @@ namespace Noether {
             inline void Unbind() override { glBindTexture(GL_TEXTURE_2D, 0); GL_LOG_ERROR; }
 
             inline u32 GetRendererID() { return m_RendererID; }
+            inline u32 GetSampleCount() { return m_Samples; }
             
         private:
             u32 m_RendererID;
+            u32 m_Samples = 0;
             i32 m_Width;
             i32 m_Height;
             i32 m_Channels;

@@ -17,7 +17,8 @@ namespace Noether {
             void OnEvent(Event& e) override;
 
         private:
-            std::shared_ptr<FrameBuffer> m_Framebuffer;
+            std::shared_ptr<FrameBuffer> m_MultisampledFramebuffer;
+            std::shared_ptr<FrameBuffer> m_ResolvedFramebuffer;
 
             std::shared_ptr<Texture2D> m_WhiteTexture;
             std::shared_ptr<Texture2D> m_TestAlbedo;

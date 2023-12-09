@@ -3,6 +3,14 @@
 #include "core/defines.hpp"
 
 namespace Noether {
+
+    struct IRect2D {
+        i32 x;
+        i32 y;
+        i32 w;
+        i32 h;
+    };
+
     namespace Maths {
         inline f32 Clamp(f32 x, f32 min, f32 max) {
             return ( x < min ) ? x : ( x > max ) ? max : x;
