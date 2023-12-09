@@ -1,5 +1,7 @@
 #include "core/app.hpp"
 
+#include "core/input.hpp"
+
 namespace Noether {
     void App::Run() {
 
@@ -12,6 +14,7 @@ namespace Noether {
         };
 
         m_Window = Window::Create(windowSpec);
+        Input::SetInputSource(m_Window);
         m_GraphicsDevice = GraphicsDevice::Create(m_Window);
 
         Initialise();

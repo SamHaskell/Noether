@@ -1,12 +1,11 @@
 workspace "Noether"
-    architecture "x64"
     configurations { "Debug", "Release" }
     startproject "emmy"
 
-OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
+OutputDir = "%{cfg.system}/%{cfg.buildcfg}"
 
 group "Dependencies"
-	include "engine/vendor/glfw"
+	include "engine/vendor/glfw/premake5.lua"
 group ""
 
 group "Engine"

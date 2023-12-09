@@ -19,7 +19,7 @@ namespace Noether {
         stbi_image_free(data);
     }
 
-    Texture2DGL::Texture2DGL(i32 width, i32 height, u32 samples) {
+    Texture2DGL::Texture2DGL(i32 width, i32 height, u32 samples, AttachmentType type) {
         m_Width = width;
         m_Height = height;
         m_Channels = 4;
@@ -27,21 +27,33 @@ namespace Noether {
     
         glGenTextures(1, &m_RendererID); GL_LOG_ERROR;
 
+        GLenum format;
+        GLenum componentType;
+        if (type == AttachmentType::Color) {
+            format = GL_RGBA;
+            componentType = GL_UNSIGNED_BYTE;
+        } else {
+            format = GL_DEPTH_COMPONENT;
+            componentType = GL_FLOAT;
+        }
+
         if (samples == 0) {
             glBindTexture(GL_TEXTURE_2D, m_RendererID); GL_LOG_ERROR;
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); GL_LOG_ERROR;
+            glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, componentType, NULL); GL_LOG_ERROR;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_LOG_ERROR;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_LOG_ERROR;
             glBindTexture(GL_TEXTURE_2D, 0); GL_LOG_ERROR;
         } else {
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_RendererID); GL_LOG_ERROR;
-            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA, m_Width, m_Height, GL_TRUE); GL_LOG_ERROR;
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, m_Width, m_Height, GL_TRUE); GL_LOG_ERROR;
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0); GL_LOG_ERROR; 
         }
     }
 
     Texture2DGL::~Texture2DGL() {
-        
+        glDeleteTextures(1, &m_RendererID);
     }
 
     TextureCubeGL::TextureCubeGL(const CubeMapData& data) : m_Data(data) {

@@ -1,5 +1,5 @@
 project "emmy"
-    kind "ConsoleApp"
+    kind "WindowedApp"
     language "C++"
     cppdialect "C++20"
     targetdir "bin/%{cfg.buildcfg}"
@@ -25,8 +25,8 @@ project "emmy"
     objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
 
     filter "system:macosx"
-        systemversion "latest"
         defines { "PLATFORM_MAC" }
+        targetextension ""
         links {
             "Cocoa.framework",
             "IOKit.framework",

@@ -16,4 +16,13 @@ namespace Noether {
 
             virtual void Resize(i32 width, i32 height) = 0;
     };
+
+    class DepthBuffer {
+        public:
+            static std::shared_ptr<DepthBuffer> Create(u32 width, u32 height);
+            virtual ~DepthBuffer() = default;
+
+            virtual void Bind() = 0;
+            virtual void Unbind() = 0;
+    };
 };

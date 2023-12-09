@@ -6,12 +6,6 @@ namespace Noether {
     FrameBufferGL::FrameBufferGL(u32 width, u32 height, u32 samples = 0) {
         glGenFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-        
-        // To complete a framebuffer we need:
-        //  - At least one buffer (color, depth, stencil)
-        //  - At least one color attachment
-        //  - All attachments should have some reserved memory on GPU
-        //  - Each buffer should have the same number of samples
 
         m_ColorAttachment = Texture2D::Create(width, height, samples);
 
@@ -58,12 +52,6 @@ namespace Noether {
 
         glGenFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-        
-        // To complete a framebuffer we need:
-        //  - At least one buffer (color, depth, stencil)
-        //  - At least one color attachment
-        //  - All attachments should have some reserved memory on GPU
-        //  - Each buffer should have the same number of samples
 
         m_ColorAttachment = Texture2D::Create(width, height);
 
@@ -94,6 +82,36 @@ namespace Noether {
     }
 
     void FrameBufferGL::Unbind() {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    DepthBufferGL::DepthBufferGL(u32 width, u32 height) {
+        glGenFramebuffers(1, &m_RendererID);
+
+        m_DepthAttachment = Texture2D::Create(width, height, 0, AttachmentType::Depth);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+        glFramebufferTexture2D(
+            GL_FRAMEBUFFER,
+            GL_DEPTH_ATTACHMENT,
+            GL_TEXTURE_2D,
+            std::static_pointer_cast<Texture2DGL>(m_DepthAttachment)->GetRendererID(),
+            0
+        );
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    DepthBufferGL::~DepthBufferGL() {
+        glDeleteFramebuffers(1, &m_RendererID);
+    }
+
+    void DepthBufferGL::Bind() {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+    }
+
+    void DepthBufferGL::Unbind() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 };

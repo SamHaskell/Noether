@@ -49,8 +49,6 @@ namespace Noether {
                 break;
         }
 
-        NT_INFO("Hello");
-
         m_WindowHandle = glfwCreateWindow(
             chosenWidth, chosenHeight,
             spec.Title.c_str(),
@@ -58,8 +56,6 @@ namespace Noether {
         );
 
         NT_ASSERT(m_WindowHandle != NULL, "GLFW Failed to create a Window!");
-
-        NT_INFO("Again!");
 
         glfwGetWindowSize(m_WindowHandle, &m_WindowState.Width, &m_WindowState.Height);
         glfwGetFramebufferSize(m_WindowHandle, &m_WindowState.BackbufferWidth, &m_WindowState.BackbufferHeight);

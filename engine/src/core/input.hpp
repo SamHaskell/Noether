@@ -1,10 +1,28 @@
 #pragma once
 
 #include "core/defines.hpp"
-
 #include "maths/vector.hpp"
 
 namespace Noether {
+    class Window;
+
+    enum class KeyCode;
+    enum class MouseButton;
+
+    class Input {
+        public:
+            inline static void SetInputSource(std::shared_ptr<Window> window) {
+                m_Owner = window;
+            }
+
+            static bool IsKeyPressed(KeyCode key);
+            static bool IsMouseButtonPressed(MouseButton button);
+            static Vec2 GetMousePosition();
+
+        private:
+            static std::shared_ptr<Window> m_Owner;
+    };
+
     enum class MouseButton : i32 {
         Button1         = 0,
         Button2         = 1,

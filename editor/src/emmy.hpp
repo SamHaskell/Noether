@@ -20,6 +20,8 @@ namespace Noether {
             std::shared_ptr<FrameBuffer> m_MultisampledFramebuffer;
             std::shared_ptr<FrameBuffer> m_ResolvedFramebuffer;
 
+            std::shared_ptr<DepthBuffer> m_ShadowMap;
+
             std::shared_ptr<Texture2D> m_WhiteTexture;
             std::shared_ptr<Texture2D> m_TestAlbedo;
             
@@ -44,9 +46,11 @@ namespace Noether {
                 Vec3 Position = {0.0f, 0.0f, 0.0f};
                 Vec3 Rotation = {0.0f, 0.0f, 0.0f};
                 Vec3 Scale = {1.0f, 1.0f, 1.0f};
-            } m_TestTransform;
-
+            };
+            
+            Transform m_TestTransform;
             Transform m_GroundTransform;
+            Transform m_CameraTransform;
 
             PointLight m_PointLight;
             DirectionalLight m_DirectionalLight;

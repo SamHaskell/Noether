@@ -7,6 +7,7 @@ namespace Noether {
         auto window = GetMainWindow();
         m_MultisampledFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 4);
         m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);
+        m_ShadowMap = DepthBuffer::Create(2048, 2048);
 
         m_TestMesh = Mesh::Load("assets/models/f22.obj");
         m_CubeMesh = Mesh::Load("assets/models/cube.obj");
@@ -152,6 +153,11 @@ namespace Noether {
             .Scale = {10000.0f, 1.0f, 10000.0f}
         };
 
+        m_CameraTransform = {
+            .Position = {0.0f, 3.0f, 5.0f},
+            .Rotation = {30.0f, 0.0f, 0.0f}
+        };
+
     }
 
     void Editor::Shutdown() {
@@ -161,6 +167,30 @@ namespace Noether {
     void Editor::Update(f64 dt) {
         m_DebugData.FrameTime = dt;
         m_UnlitMaterial->Color = m_PointLight.Color;
+
+        if (Input::IsKeyPressed(KeyCode::W)) {
+            m_CameraTransform.Position.z -= 1.0f * dt;
+        }
+
+        if (Input::IsKeyPressed(KeyCode::S)) {
+            m_CameraTransform.Position.z += 1.0f * dt;
+        }
+
+        if (Input::IsKeyPressed(KeyCode::A)) {
+            m_CameraTransform.Position.x -= 1.0f * dt;
+        }
+
+        if (Input::IsKeyPressed(KeyCode::D)) {
+            m_CameraTransform.Position.x += 1.0f * dt;
+        }
+
+        if (Input::IsKeyPressed(KeyCode::Q)) {
+            m_CameraTransform.Position.y -= 1.0f * dt;
+        }
+
+        if (Input::IsKeyPressed(KeyCode::E)) {
+            m_CameraTransform.Position.y += 1.0f * dt;
+        }
     }
 
     void Editor::Render() {
@@ -171,7 +201,8 @@ namespace Noether {
 
         // Set up camera.
 
-        Mat4 view = Matrix4::ViewLookAt({2.0f, 3.0f, 4.0f}, {0.0f, 1.0f, 0.0f});
+        Vec3 lookDir = Vector3::Forward();
+        Mat4 view = Matrix4::ViewLookAt(m_CameraTransform.Position, lookDir);
 
         f32 aspect = (f32)GetMainWindow()->GetBackbufferWidth() / (f32)GetMainWindow()->GetBackbufferHeight();
 
@@ -191,7 +222,7 @@ namespace Noether {
         { // For each shader.
             m_LitShader->Bind();
             m_LitShader->SetUniformMat4("u_WorldToProjectionMatrix", proj * view);
-            m_LitShader->SetUniformFloat3("u_EyePositionWS", {2.0f, 3.0f, 4.0f});
+            m_LitShader->SetUniformFloat3("u_EyePositionWS", m_CameraTransform.Position);
 
             // Apply point light uniforms.
 

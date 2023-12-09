@@ -7,7 +7,7 @@ namespace Noether {
     class Texture2DGL : public Texture2D {
         public:
             Texture2DGL(const std::string& path);
-            Texture2DGL(i32 width, i32 height, u32 samples = 0);
+            Texture2DGL(i32 width, i32 height, u32 samples = 0, AttachmentType type = AttachmentType::Color);
             ~Texture2DGL();
 
             inline void Bind(u32 unit = 0) override { 

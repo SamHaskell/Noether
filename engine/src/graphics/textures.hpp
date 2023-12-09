@@ -3,10 +3,15 @@
 #include "core/defines.hpp"
 
 namespace Noether {
+    enum class AttachmentType {
+        Color,
+        Depth
+    };
+
     class Texture2D {
         public:
             static std::shared_ptr<Texture2D> Create(const std::string& path);
-            static std::shared_ptr<Texture2D> Create(i32 width, i32 height, u32 samples = 0);
+            static std::shared_ptr<Texture2D> Create(i32 width, i32 height, u32 samples = 0, AttachmentType type = AttachmentType::Color);
             virtual ~Texture2D() = default;
 
             virtual void Bind(u32 unit = 0) = 0;
