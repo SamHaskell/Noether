@@ -12,8 +12,8 @@ project "emmy"
 
     includedirs {
         "src",
-	    "../noether/src",
-        "../noether/vendor/imgui"
+	    "../engine/src",
+        "../engine/vendor/imgui"
     }
 
     links {

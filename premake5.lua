@@ -6,7 +6,7 @@ workspace "Noether"
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
 group "Engine"
-	include "noether/premake5.lua"
+	include "engine/premake5.lua"
 group ""
 
 include "editor/premake5.lua"
