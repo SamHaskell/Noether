@@ -31,7 +31,7 @@ namespace Noether {
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
         i32 chosenWidth, chosenHeight;
-        GLFWmonitor* chosenMonitor;
+        GLFWmonitor* chosenMonitor = NULL;
 
         switch (spec.Mode) {
             case DisplayMode::Windowed:
