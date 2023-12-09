@@ -17,6 +17,11 @@ namespace Noether {
             WindowGLFW(const WindowSpec& spec);
             ~WindowGLFW();
 
+            inline i32 GetScreenWidth() override { return m_WindowState.Width; }
+            inline i32 GetScreenHeight() override { return m_WindowState.Height; }
+            inline i32 GetBackbufferWidth() override { return m_WindowState.BackbufferWidth; }
+            inline i32 GetBackbufferHeight() override { return m_WindowState.BackbufferHeight; }
+
             inline void* GetNativeHandle() override { return (void*)m_WindowHandle; };
 
             void NewFrame() override;

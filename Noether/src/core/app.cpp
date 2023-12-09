@@ -34,6 +34,10 @@ namespace Noether {
                 e.Handled = true;
                 break;
             }
+            case Event::Type::WindowBackbufferSize:
+            {
+                m_GraphicsDevice->SetViewport(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
+            }
             default:
                 break;
         }
@@ -47,7 +51,7 @@ namespace Noether {
         f64 dt = m_AppClock.Tick();
         m_Window->NewFrame();
         
-        Update();
+        Update(dt);
 
         m_GraphicsDevice->Clear();
         {

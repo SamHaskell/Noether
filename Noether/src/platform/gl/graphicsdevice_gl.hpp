@@ -13,7 +13,7 @@ namespace Noether {
             void Clear(ClearFlags flags) const override;
 
             void SetDepthTesting(bool isActive) const override;
-            void SetViewportSize(i32 width, i32 height) const override;
+            void SetViewport(i32 width, i32 height) const override;
 
             void BeginGUI() const override;
             void EndGUI() const override;

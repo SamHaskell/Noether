@@ -21,7 +21,7 @@ namespace Noether {
             virtual void Clear(ClearFlags flags) const = 0;
 
             virtual void SetDepthTesting(bool isActive) const = 0;
-            virtual void SetViewportSize(i32 width, i32 height) const = 0;
+            virtual void SetViewport(i32 width, i32 height) const = 0;
 
             virtual void BeginGUI() const = 0;
             virtual void EndGUI() const = 0;

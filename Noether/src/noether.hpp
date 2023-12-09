@@ -9,3 +9,12 @@
 #include "maths/quaternion.hpp"
 #include "maths/random.hpp"
 #include "maths/rotation.hpp"
+
+#include "graphics/buffers.hpp"
+#include "graphics/framebuffer.hpp"
+#include "graphics/graphicsdevice.hpp"
+#include "graphics/lights.hpp"
+#include "graphics/materials.hpp"
+#include "graphics/shader.hpp"
+#include "graphics/textures.hpp"
+#include "graphics/mesh.hpp"

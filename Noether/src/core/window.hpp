@@ -22,6 +22,11 @@ namespace Noether {
         public:
             static std::shared_ptr<Window> Create(const WindowSpec& spec);
 
+            virtual i32 GetScreenWidth() = 0;
+            virtual i32 GetScreenHeight() = 0;
+            virtual i32 GetBackbufferWidth() = 0;
+            virtual i32 GetBackbufferHeight() = 0;
+
             virtual void* GetNativeHandle() = 0;
             virtual ~Window() = default;
             virtual void NewFrame() = 0;

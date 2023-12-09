@@ -16,10 +16,13 @@ namespace Noether {
             virtual void Initialise() = 0;
             virtual void Shutdown() = 0;
 
-            virtual void Update() = 0;
+            virtual void Update(f64 dt) = 0;
             virtual void Render() = 0;
             virtual void DrawGUI() = 0;
             virtual void OnEvent(Event& e) = 0;
+
+            inline const std::shared_ptr<Window> GetMainWindow() { return m_Window; }
+            inline const std::shared_ptr<GraphicsDevice> GetGraphicsDevice() { return m_GraphicsDevice; }
 
         private:
             std::shared_ptr<Window> m_Window;

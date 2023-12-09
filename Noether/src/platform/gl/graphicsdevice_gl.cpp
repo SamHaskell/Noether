@@ -64,7 +64,7 @@ namespace Noether {
         (isActive) ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE); GL_LOG_ERROR;
     }
 
-    void GraphicsDeviceGL::SetViewportSize(i32 width, i32 height) const {
+    void GraphicsDeviceGL::SetViewport(i32 width, i32 height) const {
         glViewport(0, 0, width, height);
     }
 
