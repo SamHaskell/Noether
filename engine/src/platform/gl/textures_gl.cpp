@@ -36,12 +36,8 @@ namespace Noether {
         } else {
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_RendererID); GL_LOG_ERROR;
             glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA, m_Width, m_Height, GL_TRUE); GL_LOG_ERROR;
-            glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
-            glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0); GL_LOG_ERROR; 
         }
-
-
     }
 
     Texture2DGL::~Texture2DGL() {
