@@ -170,15 +170,15 @@ namespace Noether {
             f32 cosZ = cosf(DEG2RAD * z);
 
             out[0]  = + (cosY * cosZ);
-            out[1]  = - (cosY * sinZ);
-            out[2]  = + (sinY);
+            out[1]  = + (cosY * sinZ);
+            out[2]  = - (sinY);
             
-            out[4]  = + (sinX * sinY * cosZ) + (cosX * sinZ);
-            out[5]  = - (sinX * sinY * sinZ) + (cosX * cosZ); 
-            out[6]  = - (sinX * cosY);
+            out[4]  = + (sinX * sinY * cosZ) - (cosX * sinZ);
+            out[5]  = + (sinX * sinY * sinZ) + (cosX * cosZ); 
+            out[6]  = + (sinX * cosY);
 
-            out[8]  = - (cosX * sinY * cosZ) + (sinX * sinZ);
-            out[9]  = + (cosX * sinY * sinZ) + (sinX * cosZ);
+            out[8]  = + (cosX * sinY * cosZ) + (sinX * sinZ);
+            out[9]  = + (cosX * sinY * sinZ) - (sinX * cosZ);
             out[10] = + (cosX * cosY);
 
             return out;
@@ -233,7 +233,7 @@ namespace Noether {
         }
 
         Mat4 ViewLookAt(Vec3 position, Vec3 target, Vec3 up) {
-            return ViewLookDir(position, position - target, up);
+            return ViewLookDir(position, target - position, up);
         }
 
         Mat4 Orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far) {

@@ -149,13 +149,13 @@ namespace Noether {
         };
 
         m_GroundTransform = {
-            .Position = {0.0f, -30.0f, 0.0f},
+            .Position = {0.0f, -3.0f, 0.0f},
             .Scale = {10000.0f, 1.0f, 10000.0f}
         };
 
         m_CameraTransform = {
             .Position = {0.0f, 3.0f, 5.0f},
-            .Rotation = {30.0f, 0.0f, 0.0f}
+            .Rotation = {-30.0f, 0.0f, 0.0f}
         };
     }
 
@@ -200,11 +200,10 @@ namespace Noether {
             Vec2 mousePos = Input::GetMousePosition();
             Input::RecenterMousePosition();
 
-            f32 pitchDelta = - (f32)(GetMainWindow()->GetScreenHeight()/2 - mousePos.y) * (f32)dt * 30.0f; 
+            f32 pitchDelta = (f32)(GetMainWindow()->GetScreenHeight()/2 - mousePos.y) * (f32)dt * 30.0f; 
             f32 yawDelta = (f32)(GetMainWindow()->GetScreenWidth()/2 - mousePos.x) * (f32)dt * 30.0f; 
 
             m_CameraTransform.Rotation.x = Maths::Clamp(m_CameraTransform.Rotation.x + pitchDelta, -89.9f, 89.9f);
-            NT_INFO("%f", m_CameraTransform.Rotation.x);
             m_CameraTransform.Rotation.y = m_CameraTransform.Rotation.y + yawDelta;
         };
     }
@@ -218,6 +217,7 @@ namespace Noether {
         // Set up camera.
 
         Vec3 lookDir = Vector3::DirectionFromEuler(m_CameraTransform.Rotation);
+        NT_INFO("%f, %f, %f", lookDir.x, lookDir.y, lookDir.z);
         Mat4 view = Matrix4::ViewLookDir(m_CameraTransform.Position, lookDir);
 
         f32 aspect = (f32)GetMainWindow()->GetBackbufferWidth() / (f32)GetMainWindow()->GetBackbufferHeight();

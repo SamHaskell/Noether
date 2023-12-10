@@ -11,6 +11,6 @@ namespace Noether {
         Vec3 Scale = {1.0f, 1.0f, 1.0f};
     
         inline Mat4 LocalTransform() { return Matrix4::Translation(Position) * Matrix4::Rotation(Rotation) * Matrix4::Scale(Scale); }
-        inline Vec3 TransformDirection(Vec3 v) { return Vec3(LocalTransform() * Vec4({v.x, v.y, v.z, 0.0f})); }
+        inline Vec3 TransformDirection(Vec3 v) { return Vec3(Matrix4::Rotation(Rotation) * Vec4({v.x, v.y, v.z, 0.0f})); }
     };
 };

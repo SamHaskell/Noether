@@ -131,7 +131,7 @@ namespace Noether {
         inline Vec3 Right() { return {1.0, 0.0, 0.0}; }
         inline Vec3 Left() { return {-1.0, 0.0, 0.0}; }
         inline Vec3 Forward() { return {0.0, 0.0, -1.0}; }
-        inline Vec3 Back() { return {0.0, 0.0, 1.0}; }
+        inline Vec3 Back() { return {0.0, 0.0, +1.0}; }
 
         f32 SqrMagnitude(const Vec3& v);
         f32 Magnitude(const Vec3& v);
