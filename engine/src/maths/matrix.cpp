@@ -22,6 +22,15 @@ namespace Noether {
         };
     }
 
+    Vec4 Mat4::operator* (const Vec4& other) const {
+        return {
+            data[0] * other.x + data[4] * other.y + data[8] * other.z + data[12] * other.w,
+            data[1] * other.x + data[5] * other.y + data[9] * other.z + data[13] * other.w,
+            data[2] * other.x + data[6] * other.y + data[10] * other.z + data[14] * other.w,
+            data[3] * other.x + data[7] * other.y + data[11] * other.z + data[15] * other.w
+        };
+    }
+
     Mat4 Mat4::operator* (const Mat4& other) const {
         return {
             data[0] * other[0] + data[4] * other[1] + data[8] * other[2] + data[12] * other[3],
@@ -226,10 +235,11 @@ namespace Noether {
         }
 
         Mat4 Orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far) {
-            Mat4 out = Identity();
             f32 invWidth = 1.0f / (right - left);
             f32 invHeight = 1.0f / (top - bottom);
             f32 invDepth = 1.0f / (far - near);
+            
+            Mat4 out = Identity();
             out[0] = 2.0f * invWidth;
             out[5] = 2.0f * invHeight;
             out[10] = -2.0f * invDepth;

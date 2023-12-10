@@ -41,12 +41,6 @@ namespace Noether {
             std::shared_ptr<VertexArray> m_CubeMapVA;
 
             std::shared_ptr<TextureCube> m_CubeMap;
-
-            struct Transform {
-                Vec3 Position = {0.0f, 0.0f, 0.0f};
-                Vec3 Rotation = {0.0f, 0.0f, 0.0f};
-                Vec3 Scale = {1.0f, 1.0f, 1.0f};
-            };
             
             Transform m_TestTransform;
             Transform m_GroundTransform;

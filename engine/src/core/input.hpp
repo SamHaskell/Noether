@@ -9,6 +9,12 @@ namespace Noether {
     enum class KeyCode;
     enum class MouseButton;
 
+    enum class CursorMode {
+        Disabled,
+        Hidden,
+        Regular
+    };
+
     class Input {
         public:
             inline static void SetInputSource(std::shared_ptr<Window> window) {
@@ -18,6 +24,9 @@ namespace Noether {
             static bool IsKeyPressed(KeyCode key);
             static bool IsMouseButtonPressed(MouseButton button);
             static Vec2 GetMousePosition();
+            static void RecenterMousePosition();
+
+            static void SetCursorMode(CursorMode mode);
 
         private:
             static std::shared_ptr<Window> m_Owner;

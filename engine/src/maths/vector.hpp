@@ -3,6 +3,10 @@
 #include "core/defines.hpp"
 
 namespace Noether {
+    struct Vec2;
+    struct Vec3;
+    struct Vec4;
+
     struct Vec2 {
         f32 x;
         f32 y;
@@ -56,7 +60,30 @@ namespace Noether {
         Vec2 LerpClamped(const Vec2& u, const Vec2& v, f32 t);
     };
 
+    struct Vec4 {
+        union {
+            struct {
+                f32 x;
+                f32 y;
+                f32 z;
+                f32 w;
+            };
+            struct {
+                f32 r;
+                f32 g;
+                f32 b;
+                f32 a;
+            };
+        };
+    };
+
+    using Color = Vec4;
+
     struct Vec3 {
+        Vec3() = default;
+        Vec3(f32 x, f32 y, f32 z) : x(x), y(y), z(z) {};
+        Vec3(Vec4 v) : x(v.x), y(v.y), z(v.z) {}
+
         f32 x;
         f32 y;
         f32 z;
@@ -114,26 +141,8 @@ namespace Noether {
         Vec3 Lerp(const Vec3& u, const Vec3& v, f32 t);
         Vec3 LerpClamped(const Vec3& u, const Vec3& v, f32 t);
         Vec3 Cross(const Vec3& u, const Vec3& v);
+        Vec3 DirectionFromEuler(const Vec3& v);
     };
-
-    struct Vec4 {
-        union {
-            struct {
-                f32 x;
-                f32 y;
-                f32 z;
-                f32 w;
-            };
-            struct {
-                f32 r;
-                f32 g;
-                f32 b;
-                f32 a;
-            };
-        };
-    };
-
-    using Color = Vec4;
 };
 
 namespace std {

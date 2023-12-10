@@ -27,6 +27,7 @@ namespace Noether {
         void operator*=(const f32& val);
         void operator*=(const Mat4& other);
         Mat4 operator* (const f32 val) const;
+        Vec4 operator* (const Vec4& other) const;
         Mat4 operator* (const Mat4& other) const;
         void operator+=(const f32 val);
         void operator+=(const Mat4& other);

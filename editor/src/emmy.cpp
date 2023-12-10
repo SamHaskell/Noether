@@ -158,6 +158,7 @@ namespace Noether {
             .Rotation = {30.0f, 0.0f, 0.0f}
         };
 
+        Input::SetCursorMode(CursorMode::Disabled);
     }
 
     void Editor::Shutdown() {
@@ -168,29 +169,44 @@ namespace Noether {
         m_DebugData.FrameTime = dt;
         m_UnlitMaterial->Color = m_PointLight.Color;
 
-        if (Input::IsKeyPressed(KeyCode::W)) {
-            m_CameraTransform.Position.z -= 1.0f * dt;
+        Vec3 moveInput = {0.0f, 0.0f, 0.0f};
+        {
+            if (Input::IsKeyPressed(KeyCode::W)) {
+                moveInput.z -= 1.0f * dt;
+            }
+
+            if (Input::IsKeyPressed(KeyCode::S)) {
+                moveInput.z += 1.0f * dt;
+            }
+
+            if (Input::IsKeyPressed(KeyCode::A)) {
+                moveInput.x -= 1.0f * dt;
+            }
+
+            if (Input::IsKeyPressed(KeyCode::D)) {
+                moveInput.x += 1.0f * dt;
+            }
+
+            if (Input::IsKeyPressed(KeyCode::Q)) {
+                moveInput.y -= 1.0f * dt;
+            }
+
+            if (Input::IsKeyPressed(KeyCode::E)) {
+                moveInput.y += 1.0f * dt;
+            }
         }
 
-        if (Input::IsKeyPressed(KeyCode::S)) {
-            m_CameraTransform.Position.z += 1.0f * dt;
-        }
+        m_CameraTransform.Position += m_CameraTransform.TransformDirection(moveInput);
 
-        if (Input::IsKeyPressed(KeyCode::A)) {
-            m_CameraTransform.Position.x -= 1.0f * dt;
-        }
+        Vec2 mousePos = Input::GetMousePosition();
+        Input::RecenterMousePosition();
 
-        if (Input::IsKeyPressed(KeyCode::D)) {
-            m_CameraTransform.Position.x += 1.0f * dt;
-        }
+        f32 pitchDelta = - (f32)(GetMainWindow()->GetScreenHeight()/2 - mousePos.y) * (f32)dt * 30.0f; 
+        f32 yawDelta = (f32)(GetMainWindow()->GetScreenWidth()/2 - mousePos.x) * (f32)dt * 30.0f; 
 
-        if (Input::IsKeyPressed(KeyCode::Q)) {
-            m_CameraTransform.Position.y -= 1.0f * dt;
-        }
-
-        if (Input::IsKeyPressed(KeyCode::E)) {
-            m_CameraTransform.Position.y += 1.0f * dt;
-        }
+        m_CameraTransform.Rotation.x = Maths::Clamp(m_CameraTransform.Rotation.x + pitchDelta, -89.9f, 89.9f);
+        NT_INFO("%f", m_CameraTransform.Rotation.x);
+        m_CameraTransform.Rotation.y = m_CameraTransform.Rotation.y + yawDelta;
     }
 
     void Editor::Render() {
@@ -201,12 +217,12 @@ namespace Noether {
 
         // Set up camera.
 
-        Vec3 lookDir = Vector3::Forward();
-        Mat4 view = Matrix4::ViewLookAt(m_CameraTransform.Position, lookDir);
+        Vec3 lookDir = Vector3::DirectionFromEuler(m_CameraTransform.Rotation);
+        Mat4 view = Matrix4::ViewLookDir(m_CameraTransform.Position, lookDir);
 
         f32 aspect = (f32)GetMainWindow()->GetBackbufferWidth() / (f32)GetMainWindow()->GetBackbufferHeight();
 
-        Mat4 proj = Matrix4::Perspective(60.0f, aspect, 0.1f, 10000.0f);
+        Mat4 proj = Matrix4::Perspective(60.0f, aspect, 0.1f, 1000.0f);
 
         // Skybox!
 
@@ -247,7 +263,7 @@ namespace Noether {
                 m_TestMaterial->Apply();
 
                 { // For each model that uses that material.
-                    Mat4 model = Matrix4::Translation(m_TestTransform.Position) * Matrix4::Rotation(m_TestTransform.Rotation) * Matrix4::Scale(m_TestTransform.Scale);
+                    Mat4 model = m_TestTransform.LocalTransform();
                     m_LitShader->SetUniformMat4("u_ModelToWorldMatrix", model);
                     GetGraphicsDevice()->DrawVertexArray(m_TestMesh->GetVertexArray());
                 }
@@ -255,7 +271,7 @@ namespace Noether {
                 m_GroundMaterial->Apply();
 
                 {
-                    Mat4 model = Matrix4::Translation(m_GroundTransform.Position) * Matrix4::Rotation(m_GroundTransform.Rotation) * Matrix4::Scale(m_GroundTransform.Scale);
+                    Mat4 model = m_GroundTransform.LocalTransform();
                     m_LitShader->SetUniformMat4("u_ModelToWorldMatrix", model);
                     GetGraphicsDevice()->DrawVertexArray(m_CubeMesh->GetVertexArray());
                 }
@@ -338,6 +354,14 @@ namespace Noether {
             ImGui::DragFloat3("Scale", &m_TestTransform.Scale.x, 0.01f);
             ImGui::DragFloat3("Position", &m_TestTransform.Position.x, 0.01f);
             ImGui::DragFloat3("Rotation", &m_TestTransform.Rotation.x, 0.36f);
+        }
+        ImGui::End();
+
+        ImGui::Begin("Camera Transform");
+        {
+            ImGui::DragFloat3("Scale", &m_CameraTransform.Scale.x, 0.01f);
+            ImGui::DragFloat3("Position", &m_CameraTransform.Position.x, 0.01f);
+            ImGui::DragFloat3("Rotation", &m_CameraTransform.Rotation.x, 0.36f);
         }
         ImGui::End();
     }

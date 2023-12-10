@@ -23,4 +23,28 @@ namespace Noether {
         glfwGetCursorPos((GLFWwindow*)window, &x, &y);
         return {(f32)x, (f32)y};
     }
+
+    void Input::RecenterMousePosition() {
+        GLFWwindow* window = (GLFWwindow*)(m_Owner->GetNativeHandle());
+        i32 w, h;
+        glfwGetWindowSize(window, &w, &h);
+        glfwSetCursorPos(window, w/2, h/2);
+    }
+
+    void Input::SetCursorMode(CursorMode mode) {
+        GLFWwindow* window = (GLFWwindow*)(m_Owner->GetNativeHandle());
+        i32 cursorMode;
+        switch (mode) {
+            case CursorMode::Disabled:
+                cursorMode = GLFW_CURSOR_DISABLED;
+                break;
+            case CursorMode::Hidden:
+                cursorMode = GLFW_CURSOR_HIDDEN;
+                break;
+            case CursorMode::Regular:
+                cursorMode = GLFW_CURSOR_NORMAL;
+                break;
+        }
+        glfwSetInputMode(window, GLFW_CURSOR, cursorMode);
+    }
 };

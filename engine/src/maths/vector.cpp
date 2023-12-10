@@ -70,5 +70,14 @@ namespace Noether {
                 u.x * v.y - u.y * v.x
             };
         }
+
+        Vec3 DirectionFromEuler(const Vec3& v) {
+            Vec3 dir;
+            dir.x = cos(DEG2RAD * v.x) * sin(DEG2RAD * v.y);
+            dir.y = sin(DEG2RAD * v.x);
+            dir.z = cos(DEG2RAD * v.x) * cos(DEG2RAD * v.y);
+            dir.NormaliseInPlace();
+            return dir;
+        }
     };
 };
