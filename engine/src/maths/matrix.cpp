@@ -205,10 +205,12 @@ namespace Noether {
         Mat4 ViewLookDir(Vec3 position, Vec3 forward, Vec3 up) {
             
             up.NormaliseInPlace();            
-            forward = Vector3::Normalised(forward);
+            forward.NormaliseInPlace();
             Vec3 left = Vector3::Cross(up, forward);
+            left.NormaliseInPlace();
             up = Vector3::Cross(forward, left);
-
+            up.NormaliseInPlace();
+            
             Mat4 out = Matrix4::Identity();
 
             out[0] = left.x;
