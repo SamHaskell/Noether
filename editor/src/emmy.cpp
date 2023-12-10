@@ -157,8 +157,6 @@ namespace Noether {
             .Position = {0.0f, 3.0f, 5.0f},
             .Rotation = {30.0f, 0.0f, 0.0f}
         };
-
-        Input::SetCursorMode(CursorMode::Disabled);
     }
 
     void Editor::Shutdown() {
@@ -169,44 +167,46 @@ namespace Noether {
         m_DebugData.FrameTime = dt;
         m_UnlitMaterial->Color = m_PointLight.Color;
 
-        Vec3 moveInput = {0.0f, 0.0f, 0.0f};
-        {
-            if (Input::IsKeyPressed(KeyCode::W)) {
-                moveInput.z -= 1.0f * dt;
+        if (m_CameraFocused) {
+            Vec3 moveInput = {0.0f, 0.0f, 0.0f};
+            {
+                if (Input::IsKeyPressed(KeyCode::W)) {
+                    moveInput.z -= 1.0f * dt;
+                }
+
+                if (Input::IsKeyPressed(KeyCode::S)) {
+                    moveInput.z += 1.0f * dt;
+                }
+
+                if (Input::IsKeyPressed(KeyCode::A)) {
+                    moveInput.x -= 1.0f * dt;
+                }
+
+                if (Input::IsKeyPressed(KeyCode::D)) {
+                    moveInput.x += 1.0f * dt;
+                }
+
+                if (Input::IsKeyPressed(KeyCode::Q)) {
+                    moveInput.y -= 1.0f * dt;
+                }
+
+                if (Input::IsKeyPressed(KeyCode::E)) {
+                    moveInput.y += 1.0f * dt;
+                }
             }
 
-            if (Input::IsKeyPressed(KeyCode::S)) {
-                moveInput.z += 1.0f * dt;
-            }
+            m_CameraTransform.Position += m_CameraTransform.TransformDirection(moveInput);
 
-            if (Input::IsKeyPressed(KeyCode::A)) {
-                moveInput.x -= 1.0f * dt;
-            }
+            Vec2 mousePos = Input::GetMousePosition();
+            Input::RecenterMousePosition();
 
-            if (Input::IsKeyPressed(KeyCode::D)) {
-                moveInput.x += 1.0f * dt;
-            }
+            f32 pitchDelta = - (f32)(GetMainWindow()->GetScreenHeight()/2 - mousePos.y) * (f32)dt * 30.0f; 
+            f32 yawDelta = (f32)(GetMainWindow()->GetScreenWidth()/2 - mousePos.x) * (f32)dt * 30.0f; 
 
-            if (Input::IsKeyPressed(KeyCode::Q)) {
-                moveInput.y -= 1.0f * dt;
-            }
-
-            if (Input::IsKeyPressed(KeyCode::E)) {
-                moveInput.y += 1.0f * dt;
-            }
-        }
-
-        m_CameraTransform.Position += m_CameraTransform.TransformDirection(moveInput);
-
-        Vec2 mousePos = Input::GetMousePosition();
-        Input::RecenterMousePosition();
-
-        f32 pitchDelta = - (f32)(GetMainWindow()->GetScreenHeight()/2 - mousePos.y) * (f32)dt * 30.0f; 
-        f32 yawDelta = (f32)(GetMainWindow()->GetScreenWidth()/2 - mousePos.x) * (f32)dt * 30.0f; 
-
-        m_CameraTransform.Rotation.x = Maths::Clamp(m_CameraTransform.Rotation.x + pitchDelta, -89.9f, 89.9f);
-        NT_INFO("%f", m_CameraTransform.Rotation.x);
-        m_CameraTransform.Rotation.y = m_CameraTransform.Rotation.y + yawDelta;
+            m_CameraTransform.Rotation.x = Maths::Clamp(m_CameraTransform.Rotation.x + pitchDelta, -89.9f, 89.9f);
+            NT_INFO("%f", m_CameraTransform.Rotation.x);
+            m_CameraTransform.Rotation.y = m_CameraTransform.Rotation.y + yawDelta;
+        };
     }
 
     void Editor::Render() {
@@ -373,6 +373,24 @@ namespace Noether {
                 m_MultisampledFramebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
                 m_ResolvedFramebuffer->Resize(e.WindowBackbufferSize.Width, e.WindowBackbufferSize.Height);
                 break;
+            }
+            case Event::Type::Key:
+            {
+                switch (e.KeyPress.Key) {
+                    case KeyCode::Esc:
+                        if (e.KeyPress.IsDown) {
+                            Input::SetCursorMode(CursorMode::Regular);
+                            m_CameraFocused = false;
+                        }
+                        break;
+                    case KeyCode::Space:
+                        if (e.KeyPress.IsDown) {
+                            Input::SetCursorMode(CursorMode::Disabled);
+                            m_CameraFocused = true;
+                        }
+                    default:
+                        break;
+                }
             }
             default:
                 break;

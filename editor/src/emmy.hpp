@@ -17,6 +17,8 @@ namespace Noether {
             void OnEvent(Event& e) override;
 
         private:
+            bool m_CameraFocused = false;
+
             std::shared_ptr<FrameBuffer> m_MultisampledFramebuffer;
             std::shared_ptr<FrameBuffer> m_ResolvedFramebuffer;
 
