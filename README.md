@@ -24,7 +24,7 @@ I have chosen to roll my own maths library here, as opposed to running with some
 
 ## Installation
 
-As of right now, this project only builds on MacOSX. To get started just clone the repo and run premake5 gmake on the root directory.
+As of right now, this project only builds on MacOS. To get started just clone the repo and run premake5 gmake on the root directory.
 
 ## Built With
 
