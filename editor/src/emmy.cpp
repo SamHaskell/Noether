@@ -9,8 +9,8 @@ namespace Noether {
         m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);
         m_ShadowMap = DepthBuffer::Create(2048, 2048);
 
-        // m_TestMesh = Mesh::Load("assets/models/f22.obj");
-        m_TestMesh = Shapes::CreateSphere(1.0f, 128, 64);
+        // m_TestMesh = Mesh::Load("assets/models/crab.obj");
+        m_TestMesh = Shapes::CreateSphere(1.0f, 2048, 1024);
         m_CubeMesh = Mesh::Load("assets/models/cube.obj");
         
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");

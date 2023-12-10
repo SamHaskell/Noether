@@ -14,21 +14,21 @@ namespace Noether {
             float phi, theta;   
 
             for (i32 i = 0; i <= stacks; i++) {
-                phi = (PI / 2.0f) - (i * stackStep);
+                phi = - (PI / 2.0f) + (i * stackStep);
                 float rho = radius * cosf(phi);
-                vert.Position.z = radius * sinf(phi);
+                vert.Position.y = radius * sinf(phi);
 
                 for (i32 j = 0; j <= sectors; j++) {
                     theta = j * sectorStep;
 
                     vert.Position.x = rho * cosf(theta);
-                    vert.Position.y = rho * sinf(theta);
+                    vert.Position.z = rho * sinf(theta);
 
                     vert.Normal.x = vert.Position.x * invRadius;
                     vert.Normal.y = vert.Position.y * invRadius;
                     vert.Normal.z = vert.Position.z * invRadius;
 
-                    vert.TexCoord.x = (f32)j / (f32)sectors;
+                    vert.TexCoord.x = 1.0f - (f32)j / (f32)sectors;
                     vert.TexCoord.y = (f32)i / (f32)stacks;
 
                     vertices.push_back(vert);
