@@ -217,11 +217,9 @@ namespace Noether {
         // Set up camera.
 
         Vec3 lookDir = Vector3::DirectionFromEuler(m_CameraTransform.Rotation);
-        NT_INFO("%f, %f, %f", lookDir.x, lookDir.y, lookDir.z);
         Mat4 view = Matrix4::ViewLookDir(m_CameraTransform.Position, lookDir);
 
         f32 aspect = (f32)GetMainWindow()->GetBackbufferWidth() / (f32)GetMainWindow()->GetBackbufferHeight();
-
         Mat4 proj = Matrix4::Perspective(60.0f, aspect, 0.1f, 1000.0f);
 
         // Skybox!
