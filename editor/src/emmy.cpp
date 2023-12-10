@@ -9,10 +9,11 @@ namespace Noether {
         m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);
         m_ShadowMap = DepthBuffer::Create(2048, 2048);
 
-        m_TestMesh = Mesh::Load("assets/models/f22.obj");
+        // m_TestMesh = Mesh::Load("assets/models/f22.obj");
+        m_TestMesh = Shapes::CreateSphere(1.0f, 128, 64);
         m_CubeMesh = Mesh::Load("assets/models/cube.obj");
         
-        m_TestAlbedo = Texture2D::Create("assets/models/f22.png");
+        m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
         m_WhiteTexture = Texture2D::Create("assets/debug/debug_texture_white.png");
 
         m_LitShader = Shader::Create("assets/shaders/gl/3d/basic_lit.shader");
@@ -195,7 +196,7 @@ namespace Noether {
                 }
             }
 
-            m_CameraTransform.Position += m_CameraTransform.TransformDirection(moveInput);
+            m_CameraTransform.Position += m_CameraTransform.TransformDirection(moveInput * 3.0f);
 
             Vec2 mousePos = Input::GetMousePosition();
             Input::RecenterMousePosition();

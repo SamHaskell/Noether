@@ -29,7 +29,6 @@ namespace Noether {
         if (!load_ok) {
             NT_ERROR("%s", err.c_str());
         }
-        NT_INFO("%s", warn.c_str());
 
         std::vector<Vertex> vertices = {};
         std::vector<Index> indices = {};
