@@ -29,8 +29,10 @@ namespace Noether {
             
             std::shared_ptr<Shader> m_LitShader;
             std::shared_ptr<Shader> m_UnlitShader;
+            std::shared_ptr<Shader> m_DepthBlitShader;
             std::shared_ptr<Shader> m_BlitShader;
             std::shared_ptr<Shader> m_SkyShader;
+            std::shared_ptr<Shader> m_DepthPrepass;
 
             std::shared_ptr<MaterialLit> m_TestMaterial;
             std::shared_ptr<MaterialLit> m_GroundMaterial;

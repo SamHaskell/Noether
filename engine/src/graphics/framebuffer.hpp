@@ -24,5 +24,8 @@ namespace Noether {
 
             virtual void Bind() = 0;
             virtual void Unbind() = 0;
+
+            virtual u32 GetWidth() = 0;
+            virtual u32 GetHeight() = 0;
     };
 };

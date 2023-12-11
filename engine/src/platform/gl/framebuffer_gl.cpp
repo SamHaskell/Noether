@@ -86,6 +86,9 @@ namespace Noether {
     }
 
     DepthBufferGL::DepthBufferGL(u32 width, u32 height) {
+        m_Width = width;
+        m_Height = height;
+
         glGenFramebuffers(1, &m_RendererID);
 
         m_DepthAttachment = Texture2D::Create(width, height, 0, AttachmentType::Depth);

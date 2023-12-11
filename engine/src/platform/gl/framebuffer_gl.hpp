@@ -8,12 +8,12 @@ namespace Noether {
             FrameBufferGL(u32 width, u32 height, u32 samples);
             ~FrameBufferGL();
 
-            virtual std::shared_ptr<Texture2D> GetColorAttachment() override;
+            std::shared_ptr<Texture2D> GetColorAttachment() override;
 
-            virtual void Resize(i32 width, i32 height) override;
+            void Resize(i32 width, i32 height) override;
 
-            virtual void Bind() override;
-            virtual void Unbind() override;
+            void Bind() override;
+            void Unbind() override;
 
             inline u32 GetRendererID() { return m_RendererID; }
         
@@ -28,13 +28,18 @@ namespace Noether {
             DepthBufferGL(u32 width, u32 height);
             ~DepthBufferGL();
 
-            virtual void Bind() override;
-            virtual void Unbind() override;
+            void Bind() override;
+            void Unbind() override;
+
+            inline u32 GetWidth() override { return m_Width; }
+            inline u32 GetHeight() override { return m_Height; }
 
             inline u32 GetRendererID() { return m_RendererID; }
         
         private:
             u32 m_RendererID;
+            u32 m_Width;
+            u32 m_Height;
             std::shared_ptr<Texture2D> m_DepthAttachment;
     };
 };

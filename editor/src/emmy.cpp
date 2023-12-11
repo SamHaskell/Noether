@@ -10,13 +10,15 @@ namespace Noether {
         m_ShadowMap = DepthBuffer::Create(2048, 2048);
 
         // m_TestMesh = Mesh::Load("assets/models/crab.obj");
-        m_TestMesh = Shapes::CreateSphere(1.0f, 2048, 1024);
-        m_CubeMesh = Mesh::Load("assets/models/cube.obj");
+        m_TestMesh = Shapes::CreateSphere(3.0f, 256, 128);
+        m_CubeMesh = Shapes::CreateCube();
         
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
         m_WhiteTexture = Texture2D::Create("assets/debug/debug_texture_white.png");
 
         m_LitShader = Shader::Create("assets/shaders/gl/3d/basic_lit.shader");
+
+        m_DepthPrepass = Shader::Create("assets/shaders/gl/3d/prepass_depth.shader");
 
         m_TestMaterial = MaterialLit::Create(m_LitShader);
 
@@ -41,6 +43,7 @@ namespace Noether {
         m_UnlitMaterial->ColorMap = m_WhiteTexture;
 
         m_BlitShader = Shader::Create("assets/shaders/gl/ppfx/screen_blit.shader");
+        m_DepthBlitShader = Shader::Create("assets/shaders/gl/ppfx/depth_blit.shader");
 
         m_SkyShader = Shader::Create("assets/shaders/gl/sky/test_sky.shader");
 
@@ -158,6 +161,10 @@ namespace Noether {
             .Position = {0.0f, 3.0f, 5.0f},
             .Rotation = {-30.0f, 0.0f, 0.0f}
         };
+
+        m_TestTransform = {
+            .Position = {0.0f, 2.0f, 0.0f}
+        };
     }
 
     void Editor::Shutdown() {
@@ -210,9 +217,49 @@ namespace Noether {
     }
 
     void Editor::Render() {
+
+        // Shadow-mapping prepass for the directional light
+
+        m_ShadowMap->Bind();
+        GetGraphicsDevice()->SetViewport(m_ShadowMap->GetWidth(), m_ShadowMap->GetHeight());
+
+        GetGraphicsDevice()->Clear(ClearFlags(ClearFlagBits::Depth));
+
+        // Set up virtual camera (orthographic here for a directional light)
+
+        Vec3 lightDir = m_DirectionalLight.Direction;
+        Mat4 lightView = Matrix4::ViewLookDir(m_CameraTransform.Position - (lightDir * 10.0f), lightDir);
+        Mat4 lightProj = Matrix4::Orthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+
+        m_DepthPrepass->Bind();
+        m_DepthPrepass->SetUniformMat4("u_WorldToProjectionMatrix", lightProj * lightView);
+
+        {
+            {
+                Mat4 model = m_TestTransform.LocalTransform();
+                m_DepthPrepass->SetUniformMat4("u_ModelToWorldMatrix", model);
+                GetGraphicsDevice()->DrawVertexArray(m_TestMesh->GetVertexArray());
+            }
+
+            {                    
+                Mat4 model = m_GroundTransform.LocalTransform();
+                m_DepthPrepass->SetUniformMat4("u_ModelToWorldMatrix", model);
+                GetGraphicsDevice()->DrawVertexArray(m_CubeMesh->GetVertexArray());
+            }
+            
+            {
+                Mat4 model = Matrix4::Translation(m_PointLight.Position) * Matrix4::Scale(0.1, 0.1, 0.1);
+                m_DepthPrepass->SetUniformMat4("u_ModelToWorldMatrix", model);
+                GetGraphicsDevice()->DrawVertexArray(m_CubeMesh->GetVertexArray());                    
+            }
+        }
+
+        GetGraphicsDevice()->SetViewport(GetMainWindow()->GetBackbufferWidth(), GetMainWindow()->GetBackbufferHeight());
+
         // Bind the framebuffer
 
         m_MultisampledFramebuffer->Bind();
+
         GetGraphicsDevice()->Clear();
 
         // Set up camera.
@@ -277,7 +324,7 @@ namespace Noether {
             }
 
             m_UnlitShader->Bind();
-            m_LitShader->SetUniformMat4("u_WorldToProjectionMatrix", proj * view);
+            m_UnlitShader->SetUniformMat4("u_WorldToProjectionMatrix", proj * view);
 
             {
                 m_UnlitMaterial->Apply();
