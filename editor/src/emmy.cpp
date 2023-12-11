@@ -14,6 +14,9 @@ namespace Noether {
         m_CubeMesh = Shapes::CreateCube();
         
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
+        m_TestSpecular = Texture2D::Create("assets/textures/earth_specular.png");
+        m_TestNormal = Texture2D::Create("assets/textures/earth_normal.png");
+
         m_WhiteTexture = Texture2D::Create("assets/debug/debug_texture_white.png");
 
         m_LitShader = Shader::Create("assets/shaders/gl/3d/basic_lit.shader");
@@ -25,8 +28,10 @@ namespace Noether {
         m_TestMaterial->AmbientColor = {1.0f, 1.0f, 1.0f, 1.0f};
         m_TestMaterial->DiffuseColor = {1.0f, 1.0f, 1.0f, 1.0f};
         m_TestMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
         m_TestMaterial->DiffuseMap = m_TestAlbedo;
-        m_TestMaterial->SpecularMap = m_WhiteTexture;
+        m_TestMaterial->SpecularMap = m_TestSpecular;
+        m_TestMaterial->NormalMap = m_TestNormal;
 
         m_GroundMaterial = MaterialLit::Create(m_LitShader);
 
@@ -35,6 +40,7 @@ namespace Noether {
         m_GroundMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
         m_GroundMaterial->DiffuseMap = m_WhiteTexture;
         m_GroundMaterial->SpecularMap = m_WhiteTexture;
+        m_GroundMaterial->NormalMap = m_WhiteTexture;
 
         m_UnlitShader = Shader::Create("assets/shaders/gl/3d/basic_unlit.shader");
         m_UnlitMaterial = MaterialUnlit::Create(m_UnlitShader);

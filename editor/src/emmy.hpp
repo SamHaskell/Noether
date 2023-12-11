@@ -26,6 +26,8 @@ namespace Noether {
 
             std::shared_ptr<Texture2D> m_WhiteTexture;
             std::shared_ptr<Texture2D> m_TestAlbedo;
+            std::shared_ptr<Texture2D> m_TestNormal;
+            std::shared_ptr<Texture2D> m_TestSpecular;
             
             std::shared_ptr<Shader> m_LitShader;
             std::shared_ptr<Shader> m_UnlitShader;

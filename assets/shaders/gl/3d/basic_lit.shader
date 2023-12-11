@@ -33,6 +33,7 @@ struct Material {
     vec4 SpecularColor;
     sampler2D DiffuseMap;
     sampler2D SpecularMap;
+    sampler2D NormalMap;
 };
 
 struct DirectionalLight {
@@ -134,16 +135,22 @@ vec4 calculate_point_lighting(PointLight light, vec3 normal, vec3 viewDir) {
 }
 
 float calculate_shadow_factor(vec4 positionLightSpace) {
-    float shadow;
+    float shadow = 0.0;
+    float bias = 0.005;
 
     vec3 projCoords = positionLightSpace.xyz / positionLightSpace.w;
     projCoords = (projCoords * 0.5) + 0.5;
-    float depthTest = texture(u_ShadowMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
 
-    float bias = 0.005;
+    vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+            float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(i, j) * texelSize).r;
+            shadow += (currentDepth - bias) > pcfDepth ? 1.0f : 0.0f;
+        }
+    }
 
-    shadow = currentDepth - bias > depthTest ? 1.0 : 0.0;
+    shadow /= 9.0f;
 
     if(projCoords.z > 1.0)
         shadow = 0.0;

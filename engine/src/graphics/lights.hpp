@@ -19,6 +19,6 @@ namespace Noether {
         f32 AmbientIntensity = 0.1f;
         Color Color = {1.0f, 1.0f, 1.0f, 1.0f};
         f32 Intensity = 0.3f;
-        Vec3 Direction = {-1.0f, -1.0f, -1.0f};
+        Vec3 Direction = {0.0f, -0.4f, -1.0f};
     };
 };

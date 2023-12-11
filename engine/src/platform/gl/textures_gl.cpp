@@ -3,7 +3,7 @@
 #include "stb_image.h"
 
 namespace Noether {
-    Texture2DGL::Texture2DGL(const std::string& path) {
+    Texture2DGL::Texture2DGL(const std::string& path, ImageFormat format) {
         glGenTextures(1, &m_RendererID); GL_LOG_ERROR;
         glBindTexture(GL_TEXTURE_2D, m_RendererID); GL_LOG_ERROR;
 
@@ -12,9 +12,25 @@ namespace Noether {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_LOG_ERROR;
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_LOG_ERROR;
 
+        GLenum texFormat;
+        GLenum dataFormat;
+        i32 desiredChannels;
+        switch (format) {
+            case ImageFormat::RGBA:
+                texFormat = GL_RGBA;
+                dataFormat = GL_UNSIGNED_BYTE;
+                desiredChannels = 4;
+                break;
+            case ImageFormat::Depth:
+                texFormat = GL_DEPTH_COMPONENT;
+                dataFormat = GL_FLOAT;
+                desiredChannels = 1;
+                break;
+        }
+
         stbi_set_flip_vertically_on_load(true);
-        u8* data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channels, 4); GL_LOG_ERROR;
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); GL_LOG_ERROR;
+        u8* data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channels, desiredChannels); GL_LOG_ERROR;
+        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, m_Width, m_Height, 0, texFormat, dataFormat, data); GL_LOG_ERROR;
         glGenerateMipmap(GL_TEXTURE_2D); GL_LOG_ERROR;
         stbi_image_free(data);
     }

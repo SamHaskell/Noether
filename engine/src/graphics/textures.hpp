@@ -8,9 +8,14 @@ namespace Noether {
         Depth
     };
 
+    enum class ImageFormat {
+        RGBA,
+        Depth
+    };
+
     class Texture2D {
         public:
-            static std::shared_ptr<Texture2D> Create(const std::string& path);
+            static std::shared_ptr<Texture2D> Create(const std::string& path, ImageFormat format = ImageFormat::RGBA);
             static std::shared_ptr<Texture2D> Create(i32 width, i32 height, u32 samples = 0, AttachmentType type = AttachmentType::Color);
             virtual ~Texture2D() = default;
 

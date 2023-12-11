@@ -31,6 +31,7 @@ namespace Noether {
             Vec4 SpecularColor;
             std::shared_ptr<Texture2D> DiffuseMap;
             std::shared_ptr<Texture2D> SpecularMap;
+            std::shared_ptr<Texture2D> NormalMap;
     };
 
     class MaterialUnlit : public MaterialBase {

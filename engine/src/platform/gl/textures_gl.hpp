@@ -6,7 +6,7 @@
 namespace Noether {
     class Texture2DGL : public Texture2D {
         public:
-            Texture2DGL(const std::string& path);
+            Texture2DGL(const std::string& path, ImageFormat format);
             Texture2DGL(i32 width, i32 height, u32 samples = 0, AttachmentType type = AttachmentType::Color);
             ~Texture2DGL();
 

@@ -25,6 +25,9 @@ namespace Noether {
 
         SpecularMap->Bind(1);
         m_Shader->SetUniformInt("u_MaterialLit.SpecularMap", 1);
+
+        NormalMap->Bind(2);
+        m_Shader->SetUniformInt("u_MaterialLit.NormalMap", 2);
     }
 
     std::shared_ptr<MaterialUnlit> MaterialUnlit::Create(const std::shared_ptr<Shader>& shader) {
