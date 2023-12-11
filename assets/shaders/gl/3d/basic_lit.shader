@@ -3,6 +3,7 @@
 
 uniform mat4 u_ModelToWorldMatrix;
 uniform mat4 u_WorldToProjectionMatrix;
+uniform mat4 u_WorldToDirectionalLightMatrix;
 
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
@@ -11,6 +12,7 @@ layout(location = 2) in vec2 a_TexCoord;
 out vec3 v_PositionWS;
 out vec3 v_NormalWS;
 out vec2 v_TexCoord;
+out vec4 v_PositionDirectionalLightSpace;
 
 void main() {
     // TODO: Currently non-uniform scaling is not supported. We need to pass a matrix for transforming normals seperately ...
@@ -18,6 +20,7 @@ void main() {
     v_PositionWS = vec3(u_ModelToWorldMatrix * vec4(a_Position, 1.0f));
     v_NormalWS = vec3(u_ModelToWorldMatrix * vec4(a_Normal, 0.0f));
     v_TexCoord = a_TexCoord;
+    v_PositionDirectionalLightSpace = u_WorldToDirectionalLightMatrix * vec4(v_PositionWS, 1.0);
     gl_Position = u_WorldToProjectionMatrix * u_ModelToWorldMatrix * vec4(a_Position, 1.0);
 }
 
@@ -51,30 +54,36 @@ struct PointLight {
 };
 
 uniform Material u_MaterialLit;
+
 uniform DirectionalLight u_DirectionalLight;
 uniform PointLight u_PointLight;
+
 uniform vec3 u_EyePositionWS;
+
+uniform sampler2D u_ShadowMap;
 
 in vec3 v_PositionWS;
 in vec3 v_NormalWS;
 in vec2 v_TexCoord;
+in vec4 v_PositionDirectionalLightSpace;
 
 out vec4 f_Color;
 
-vec4 calculate_directional_lighting(DirectionalLight light, vec3 normal, vec3 viewDir);
+vec4 calculate_directional_lighting(DirectionalLight light, vec3 normal, vec3 viewDir, vec4 positionLightSpace);
 vec4 calculate_point_lighting(PointLight light, vec3 normal, vec3 viewDir);
+float calculate_shadow_factor(vec4 positionLightSpace);
 
 void main() {
     vec3 normal = normalize(v_NormalWS);
     vec3 viewDir = normalize(u_EyePositionWS - v_PositionWS);
 
-    vec4 directionalLighting = calculate_directional_lighting(u_DirectionalLight, normal, viewDir);
+    vec4 directionalLighting = calculate_directional_lighting(u_DirectionalLight, normal, viewDir, v_PositionDirectionalLightSpace);
     vec4 pointLighting = calculate_point_lighting(u_PointLight, normal, viewDir);
 
     f_Color = directionalLighting + pointLighting;
 }
 
-vec4 calculate_directional_lighting(DirectionalLight light, vec3 normal, vec3 viewDir) {
+vec4 calculate_directional_lighting(DirectionalLight light, vec3 normal, vec3 viewDir, vec4 positionLightSpace) {
     vec4 diffuseMap = texture(u_MaterialLit.DiffuseMap, v_TexCoord);
     vec4 specularMap = texture(u_MaterialLit.SpecularMap, v_TexCoord);
 
@@ -93,7 +102,9 @@ vec4 calculate_directional_lighting(DirectionalLight light, vec3 normal, vec3 vi
     float specularStrength = pow(specularity, 64.0f);
     vec4 specularLight = specularStrength * u_MaterialLit.SpecularColor * specularMap * light.Color * light.Intensity;
 
-    return (ambientLight + diffuseLight + specularLight);
+    float shadowFactor = calculate_shadow_factor(positionLightSpace);
+
+    return (ambientLight + (1.0f - shadowFactor) * (diffuseLight + specularLight));
 }
 
 vec4 calculate_point_lighting(PointLight light, vec3 normal, vec3 viewDir) {
@@ -120,4 +131,22 @@ vec4 calculate_point_lighting(PointLight light, vec3 normal, vec3 viewDir) {
 
     // Sum contributions
     return (specularLight + diffuseLight + ambientLight) * attenuation;
+}
+
+float calculate_shadow_factor(vec4 positionLightSpace) {
+    float shadow;
+
+    vec3 projCoords = positionLightSpace.xyz / positionLightSpace.w;
+    projCoords = (projCoords * 0.5) + 0.5;
+    float depthTest = texture(u_ShadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    float bias = 0.005;
+
+    shadow = currentDepth - bias > depthTest ? 1.0 : 0.0;
+
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+
+    return shadow;
 }

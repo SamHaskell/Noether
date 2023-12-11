@@ -10,8 +10,7 @@ namespace Noether {
         m_ShadowMap = DepthBuffer::Create(4096, 4096);
 
         // m_TestMesh = Mesh::Load("assets/models/crab.obj");
-        m_TestMesh = Shapes::CreateSphere(10.0f, 256, 128);
-        m_TestMesh = Shapes::CreateCube(10.0f);
+        m_TestMesh = Shapes::CreateSphere(2.0f, 256, 128);
         m_CubeMesh = Shapes::CreateCube();
         
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
@@ -229,7 +228,8 @@ namespace Noether {
 
         Vec3 lightDir = - m_DirectionalLight.Direction;
         Mat4 lightView = Matrix4::ViewLookDir(m_CameraTransform.Position, lightDir);
-        Mat4 lightProj = Matrix4::Orthographic(-50.0f, 50.0f, -50.0f, 50.0f, -50.0f, 50.0f);
+        float shadowMapWorldSide = 20.0f;
+        Mat4 lightProj = Matrix4::Orthographic(-shadowMapWorldSide, shadowMapWorldSide, -shadowMapWorldSide, shadowMapWorldSide, -shadowMapWorldSide, shadowMapWorldSide);
 
         m_DepthPrepass->Bind();
         m_DepthPrepass->SetUniformMat4("u_WorldToProjectionMatrix", lightProj * lightView);
@@ -278,7 +278,11 @@ namespace Noether {
         { // For each shader.
             m_LitShader->Bind();
             m_LitShader->SetUniformMat4("u_WorldToProjectionMatrix", proj * view);
+            m_LitShader->SetUniformMat4("u_WorldToDirectionalLightMatrix", lightProj * lightView);
             m_LitShader->SetUniformFloat3("u_EyePositionWS", m_CameraTransform.Position);
+            
+            m_LitShader->SetUniformInt("u_ShadowMap", 4);
+            m_ShadowMap->GetDepthAttachment()->Bind(4);
 
             // Apply point light uniforms.
 
@@ -339,13 +343,9 @@ namespace Noether {
         m_MultisampledFramebuffer->Unbind();
         m_ResolvedFramebuffer->Unbind();
 
-        m_DepthBlitShader->Bind();
-        m_ShadowMap->GetDepthAttachment()->Bind();
+        m_BlitShader->Bind();
+        m_ResolvedFramebuffer->GetColorAttachment()->Bind();
         GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
-
-        // m_BlitShader->Bind();
-        // m_ResolvedFramebuffer->GetColorAttachment()->Bind();
-        // GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
     }
 
     void Editor::DrawGUI() {

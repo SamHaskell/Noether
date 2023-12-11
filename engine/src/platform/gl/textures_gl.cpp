@@ -19,6 +19,8 @@ namespace Noether {
         stbi_image_free(data);
     }
 
+    // TODO: Refactor out some stuff to allow more configurable textures. e.g. Have filtering, wrapping etc be in a config struct.
+
     Texture2DGL::Texture2DGL(i32 width, i32 height, u32 samples, AttachmentType type) {
         m_Width = width;
         m_Height = height;
@@ -40,10 +42,19 @@ namespace Noether {
         if (samples == 0) {
             glBindTexture(GL_TEXTURE_2D, m_RendererID); GL_LOG_ERROR;
             glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, componentType, NULL); GL_LOG_ERROR;
+            
+            if (type == AttachmentType::Color) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_LOG_ERROR;
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_LOG_ERROR;
+            } else {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+                float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+                glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  
+            }
+
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_LOG_ERROR;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_LOG_ERROR;
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_LOG_ERROR;
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_LOG_ERROR;
             glBindTexture(GL_TEXTURE_2D, 0); GL_LOG_ERROR;
         } else {
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_RendererID); GL_LOG_ERROR;
