@@ -6,5 +6,6 @@
 namespace Noether {
     namespace Shapes {
         std::shared_ptr<Mesh> CreateSphere(f32 radius = 1.0f, u32 sectors = 36, u32 stacks = 18);
+        std::shared_ptr<Mesh> CreateCube(f32 side = 1.0f);
     };
 };

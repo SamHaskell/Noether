@@ -58,4 +58,174 @@ namespace Noether {
 
             return Mesh::Create(vertices, indices, Matrix4::Identity());
         }
+
+        std::shared_ptr<Mesh> Shapes::CreateCube(f32 side) {
+            std::vector<Vertex> vertices = 
+            {
+                // front-side
+
+                {   // left-bottom-front
+                    .Position = {-0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {-0.0f, -0.0f, +1.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {   // right-bottom-front
+                    .Position = {+0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {-0.0f, -0.0f, +1.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {   // right-top-front
+                    .Position = {+0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {-0.0f, -0.0f, +1.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {   // left-top-front
+                    .Position = {-0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {-0.0f, -0.0f, +1.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                },
+
+                // right-side
+
+                {   // right-bottom-front
+                    .Position = {+0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {+1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {   // right-bottom-back
+                    .Position = {+0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {+1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {   // right-top-back
+                    .Position = {+0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {+1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {   // right-top-front
+                    .Position = {+0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {+1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                },
+
+                // left-side
+
+                {
+                    // left-bottom-back
+                    .Position = {-0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {-1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {
+                    // left-bottom-front
+                    .Position = {-0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {-1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {
+                    // left-top-front
+                    .Position = {-0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {-1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {
+                    // left-top-back
+                    .Position = {-0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {-1.0f, +0.0f, +0.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                },
+
+                // back-side
+
+                {
+                    // right-bottom-back
+                    .Position = {+0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +0.0f, +1.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {
+                    // left-bottom-back
+                    .Position = {-0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +0.0f, +1.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {
+                    // left-top-back
+                    .Position = {-0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +0.0f, +1.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {
+                    // right-top-back
+                    .Position = {+0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +0.0f, +1.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                },
+
+                // top-side
+
+                {
+                    // left-top-front
+                    .Position = {-0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {+0.0f, +1.0f, +0.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {
+                    // right-top-front
+                    .Position = {+0.5f*side, +0.5f*side, +0.5f*side},
+                    .Normal = {+0.0f, +1.0f, +0.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {
+                    // right-top-back
+                    .Position = {+0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +1.0f, +0.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {
+                    // left-top-back
+                    .Position = {-0.5f*side, +0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, +1.0f, +0.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                },
+
+                // bottom-side
+
+                {
+                    // left-bottom-back
+                    .Position = {-0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, -1.0f, +0.0f},
+                    .TexCoord = {+0.0f, +0.0f}
+                },
+                {
+                    // right-bottom-back
+                    .Position = {+0.5f*side, -0.5f*side, -0.5f*side},
+                    .Normal = {+0.0f, -1.0f, +0.0f},
+                    .TexCoord = {+1.0f, +0.0f}
+                },
+                {
+                    // right-bottom-front
+                    .Position = {+0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {+0.0f, -1.0f, +0.0f},
+                    .TexCoord = {+1.0f, +1.0f}
+                },
+                {
+                    // left-bottom-front
+                    .Position = {-0.5f*side, -0.5f*side, +0.5f*side},
+                    .Normal = {+0.0f, -1.0f, +0.0f},
+                    .TexCoord = {+0.0f, +1.0f}
+                }
+            };
+
+            std::vector<Index> indices = {
+                0, 1, 2, 2, 3, 0,
+                4, 5, 6, 6, 7, 4,
+                8, 9, 10, 10, 11, 8,
+                12, 13, 14, 14, 15, 12,
+                16, 17, 18, 18, 19, 16,
+                20, 21, 22, 22, 23, 20
+            };
+
+            return Mesh::Create(vertices, indices, Matrix4::Identity());
+        }
 };
