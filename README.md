@@ -17,6 +17,7 @@ I have chosen to roll my own maths library here, as opposed to running with some
   * Directional and point lighting using the Phong reflection model.
   * MSAA.
   * Skyboxes.
+  * Shadow Mapping for Directional Lights.
 * General
   * Event & polling based input abstractions.
   * Variable frame-rate game loop with high-precision timing.
