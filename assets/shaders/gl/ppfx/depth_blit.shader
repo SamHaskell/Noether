@@ -21,5 +21,5 @@ out vec4 f_Color;
 uniform sampler2D u_DepthTexture;
 
 void main() {
-    f_Color = texture(u_DepthTexture, v_TexCoord).rrrr;
+    f_Color = vec4(texture(u_DepthTexture, v_TexCoord).rrr, 1.0f);
 }

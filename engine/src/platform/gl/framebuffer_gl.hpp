@@ -34,6 +34,8 @@ namespace Noether {
             inline u32 GetWidth() override { return m_Width; }
             inline u32 GetHeight() override { return m_Height; }
 
+            inline std::shared_ptr<Texture2D> GetDepthAttachment() override { return m_DepthAttachment; }
+
             inline u32 GetRendererID() { return m_RendererID; }
         
         private:

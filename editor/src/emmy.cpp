@@ -7,10 +7,11 @@ namespace Noether {
         auto window = GetMainWindow();
         m_MultisampledFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 4);
         m_ResolvedFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 0);
-        m_ShadowMap = DepthBuffer::Create(2048, 2048);
+        m_ShadowMap = DepthBuffer::Create(4096, 4096);
 
         // m_TestMesh = Mesh::Load("assets/models/crab.obj");
-        m_TestMesh = Shapes::CreateSphere(3.0f, 256, 128);
+        m_TestMesh = Shapes::CreateSphere(10.0f, 256, 128);
+        m_TestMesh = Shapes::CreateCube(10.0f);
         m_CubeMesh = Shapes::CreateCube();
         
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
@@ -154,7 +155,7 @@ namespace Noether {
 
         m_GroundTransform = {
             .Position = {0.0f, -3.0f, 0.0f},
-            .Scale = {10000.0f, 1.0f, 10000.0f}
+            .Scale = {100.0f, 1.0f, 100.0f}
         };
 
         m_CameraTransform = {
@@ -222,14 +223,13 @@ namespace Noether {
 
         m_ShadowMap->Bind();
         GetGraphicsDevice()->SetViewport(m_ShadowMap->GetWidth(), m_ShadowMap->GetHeight());
-
-        GetGraphicsDevice()->Clear(ClearFlags(ClearFlagBits::Depth));
+        GetGraphicsDevice()->Clear();
 
         // Set up virtual camera (orthographic here for a directional light)
 
-        Vec3 lightDir = m_DirectionalLight.Direction;
-        Mat4 lightView = Matrix4::ViewLookDir(m_CameraTransform.Position - (lightDir * 10.0f), lightDir);
-        Mat4 lightProj = Matrix4::Orthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+        Vec3 lightDir = - m_DirectionalLight.Direction;
+        Mat4 lightView = Matrix4::ViewLookDir(m_CameraTransform.Position, lightDir);
+        Mat4 lightProj = Matrix4::Orthographic(-50.0f, 50.0f, -50.0f, 50.0f, -50.0f, 50.0f);
 
         m_DepthPrepass->Bind();
         m_DepthPrepass->SetUniformMat4("u_WorldToProjectionMatrix", lightProj * lightView);
@@ -245,12 +245,6 @@ namespace Noether {
                 Mat4 model = m_GroundTransform.LocalTransform();
                 m_DepthPrepass->SetUniformMat4("u_ModelToWorldMatrix", model);
                 GetGraphicsDevice()->DrawVertexArray(m_CubeMesh->GetVertexArray());
-            }
-            
-            {
-                Mat4 model = Matrix4::Translation(m_PointLight.Position) * Matrix4::Scale(0.1, 0.1, 0.1);
-                m_DepthPrepass->SetUniformMat4("u_ModelToWorldMatrix", model);
-                GetGraphicsDevice()->DrawVertexArray(m_CubeMesh->GetVertexArray());                    
             }
         }
 
@@ -307,7 +301,6 @@ namespace Noether {
             
             { // For each material that uses that shader.
                 m_TestMaterial->Apply();
-
                 { // For each model that uses that material.
                     Mat4 model = m_TestTransform.LocalTransform();
                     m_LitShader->SetUniformMat4("u_ModelToWorldMatrix", model);
@@ -315,7 +308,6 @@ namespace Noether {
                 }
 
                 m_GroundMaterial->Apply();
-
                 {
                     Mat4 model = m_GroundTransform.LocalTransform();
                     m_LitShader->SetUniformMat4("u_ModelToWorldMatrix", model);
@@ -328,7 +320,6 @@ namespace Noether {
 
             {
                 m_UnlitMaterial->Apply();
-
                 {
                     Mat4 model = Matrix4::Translation(m_PointLight.Position) * Matrix4::Scale(0.1, 0.1, 0.1);
                     m_UnlitShader->SetUniformMat4("u_ModelToWorldMatrix", model);
@@ -348,9 +339,13 @@ namespace Noether {
         m_MultisampledFramebuffer->Unbind();
         m_ResolvedFramebuffer->Unbind();
 
-        m_BlitShader->Bind();
-        m_ResolvedFramebuffer->GetColorAttachment()->Bind();
+        m_DepthBlitShader->Bind();
+        m_ShadowMap->GetDepthAttachment()->Bind();
         GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
+
+        // m_BlitShader->Bind();
+        // m_ResolvedFramebuffer->GetColorAttachment()->Bind();
+        // GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
     }
 
     void Editor::DrawGUI() {

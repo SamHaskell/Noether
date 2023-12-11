@@ -244,7 +244,7 @@ namespace Noether {
             Mat4 out = Identity();
             out[0] = 2.0f * invWidth;
             out[5] = 2.0f * invHeight;
-            out[10] = -2.0f * invDepth;
+            out[10] = - 2.0f * invDepth;
             out[12] = - (right + left) * invWidth;
             out[13] = - (top + bottom) * invHeight;
             out[14] = - (far + near) * invDepth;
