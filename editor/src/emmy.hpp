@@ -35,6 +35,7 @@ namespace Noether {
             std::shared_ptr<Shader> m_BlitShader;
             std::shared_ptr<Shader> m_SkyShader;
             std::shared_ptr<Shader> m_DepthPrepass;
+            std::shared_ptr<Shader> m_TextShader;
 
             std::shared_ptr<MaterialLit> m_TestMaterial;
             std::shared_ptr<MaterialLit> m_GroundMaterial;
@@ -47,6 +48,8 @@ namespace Noether {
             std::shared_ptr<VertexArray> m_CubeMapVA;
 
             std::shared_ptr<TextureCube> m_CubeMap;
+
+            std::shared_ptr<Font> m_TestFont;
             
             Transform m_TestTransform;
             Transform m_GroundTransform;

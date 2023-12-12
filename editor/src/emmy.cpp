@@ -16,42 +16,42 @@ namespace Noether {
         m_TestAlbedo = Texture2D::Create("assets/textures/earth_day.jpg");
         m_TestSpecular = Texture2D::Create("assets/textures/earth_specular.png");
         m_TestNormal = Texture2D::Create("assets/textures/earth_normal.png");
-
         m_WhiteTexture = Texture2D::Create("assets/debug/debug_texture_white.png");
 
-        m_LitShader = Shader::Create("assets/shaders/gl/3d/basic_lit.shader");
-
-        m_DepthPrepass = Shader::Create("assets/shaders/gl/3d/prepass_depth.shader");
-
-        m_TestMaterial = MaterialLit::Create(m_LitShader);
-
-        m_TestMaterial->AmbientColor = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_TestMaterial->DiffuseColor = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_TestMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
-
-        m_TestMaterial->DiffuseMap = m_TestAlbedo;
-        m_TestMaterial->SpecularMap = m_TestSpecular;
-        m_TestMaterial->NormalMap = m_TestNormal;
-
-        m_GroundMaterial = MaterialLit::Create(m_LitShader);
-
-        m_GroundMaterial->AmbientColor = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_GroundMaterial->DiffuseColor = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_GroundMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_GroundMaterial->DiffuseMap = m_WhiteTexture;
-        m_GroundMaterial->SpecularMap = m_WhiteTexture;
-        m_GroundMaterial->NormalMap = m_WhiteTexture;
-
         m_UnlitShader = Shader::Create("assets/shaders/gl/3d/basic_unlit.shader");
-        m_UnlitMaterial = MaterialUnlit::Create(m_UnlitShader);
-
-        m_UnlitMaterial->Color = {1.0f, 1.0f, 1.0f, 1.0f};
-        m_UnlitMaterial->ColorMap = m_WhiteTexture;
-
+        m_LitShader = Shader::Create("assets/shaders/gl/3d/basic_lit.shader");
+        m_DepthPrepass = Shader::Create("assets/shaders/gl/3d/prepass_depth.shader");
         m_BlitShader = Shader::Create("assets/shaders/gl/ppfx/screen_blit.shader");
         m_DepthBlitShader = Shader::Create("assets/shaders/gl/ppfx/depth_blit.shader");
-
         m_SkyShader = Shader::Create("assets/shaders/gl/sky/test_sky.shader");
+        m_TextShader = Shader::Create("assets/shaders/gl/text/bitmap_glyph.shader");
+
+        m_TestMaterial = MaterialLit::Create(m_LitShader);
+        {
+            m_TestMaterial->AmbientColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_TestMaterial->DiffuseColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_TestMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_TestMaterial->DiffuseMap = m_TestAlbedo;
+            m_TestMaterial->SpecularMap = m_TestSpecular;
+            m_TestMaterial->NormalMap = m_TestNormal;
+        }
+
+        m_GroundMaterial = MaterialLit::Create(m_LitShader);
+        {
+            m_GroundMaterial->AmbientColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_GroundMaterial->DiffuseColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_GroundMaterial->SpecularColor = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_GroundMaterial->DiffuseMap = m_WhiteTexture;
+            m_GroundMaterial->SpecularMap = m_WhiteTexture;
+            m_GroundMaterial->NormalMap = m_WhiteTexture;
+        }
+
+
+        m_UnlitMaterial = MaterialUnlit::Create(m_UnlitShader);
+        {
+            m_UnlitMaterial->Color = {1.0f, 1.0f, 1.0f, 1.0f};
+            m_UnlitMaterial->ColorMap = m_WhiteTexture;
+        }
 
         m_TestFont = Font::Load("assets/fonts/NotoSans/NotoSans.ttf", 48);
 
