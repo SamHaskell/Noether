@@ -69,6 +69,15 @@ namespace Noether {
         (isActive) ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE); GL_LOG_ERROR;
     }
 
+    void GraphicsDeviceGL::SetBlending(bool isActive) const {
+        if (isActive) {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+        } else {
+            glDisable(GL_BLEND);
+        }
+    }
+
     void GraphicsDeviceGL::SetVSync(bool isActive) const {
         glfwSwapInterval((isActive) ? 1 : 0);
     }

@@ -340,6 +340,20 @@ namespace Noether {
             }
         }
 
+        // Render some fonts
+
+        GetGraphicsDevice()->SetBlending(true);
+
+        Mat4 screenProjection = Matrix4::Orthographic(
+            0,
+            GetMainWindow()->GetBackbufferWidth(),
+            0,
+            GetMainWindow()->GetBackbufferHeight(),
+            0.0f, 1.0f
+        );
+
+        GetGraphicsDevice()->SetBlending(false);
+
         // Blit the framebuffer onto the screen
 
         IRect2D screenRect = {
