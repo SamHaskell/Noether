@@ -15,3 +15,8 @@ group ""
 group "Tools"
     include "editor/premake5.lua"
 group ""
+
+group "Examples"
+    include "examples/template/premake5.lua"    
+    include "examples/lighting/premake5.lua"
+group ""
