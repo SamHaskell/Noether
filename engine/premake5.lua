@@ -44,10 +44,12 @@ project "noether"
         "vendor/json",
         "vendor/tiny",
         "vendor/glad/include",
+        "vendor/freetype",
     }
 
     links {
         "glfw",
+        "freetype"
     }
 
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

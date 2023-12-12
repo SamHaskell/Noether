@@ -13,12 +13,14 @@ project "emmy"
     includedirs {
         "src",
 	    "../engine/src",
-        "../engine/vendor/imgui"
+        "../engine/vendor/imgui",
+        "../engine/vendor/freetype"
     }
 
     links {
         "noether",
-        "glfw"
+        "glfw",
+        "freetype",
     }
 
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

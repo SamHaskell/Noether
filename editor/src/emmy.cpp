@@ -53,6 +53,8 @@ namespace Noether {
 
         m_SkyShader = Shader::Create("assets/shaders/gl/sky/test_sky.shader");
 
+        m_TestFont = Font::Load("assets/fonts/NotoSans/NotoSans.ttf", 48);
+
         CubeMapData cubeMapData = {
             .Paths = {
                     "assets/cubemaps/blue_sunset/blue_sunset_+X.png",

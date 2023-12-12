@@ -19,5 +19,6 @@
 #include "graphics/textures.hpp"
 #include "graphics/mesh.hpp"
 #include "graphics/shapes.hpp"
+#include "graphics/font.hpp"
 
 #include "scene/transform.hpp"
