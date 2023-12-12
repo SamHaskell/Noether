@@ -10,6 +10,9 @@ namespace Noether {
     class Shader {
         public:
             static std::shared_ptr<Shader> Create(const std::string& path);
+            Shader() = default;
+            Shader(const Shader& shader) = delete;
+            Shader& operator=(const Shader&) = delete;
             virtual ~Shader() = default;
             
             virtual void Bind() = 0;

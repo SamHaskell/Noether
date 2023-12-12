@@ -6,7 +6,7 @@ namespace Noether {
     }
 
     MaterialLit::MaterialLit(const std::shared_ptr<Shader>& shader) 
-    : MaterialBase(shader)
+    : Material(shader)
     {
 
     }
@@ -35,7 +35,7 @@ namespace Noether {
     }
 
     MaterialUnlit::MaterialUnlit(const std::shared_ptr<Shader>& shader) 
-    : MaterialBase(shader)
+    : Material(shader)
     {
 
     }
