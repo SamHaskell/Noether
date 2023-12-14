@@ -2,7 +2,6 @@
 
 #include "core/clock.hpp"
 #include "core/window.hpp"
-#include "core/resources.hpp"
 #include "graphics/graphicsdevice.hpp"
 
 namespace Noether {
@@ -24,12 +23,10 @@ namespace Noether {
 
             inline const std::shared_ptr<Window> GetMainWindow() { return m_Window; }
             inline const std::shared_ptr<GraphicsDevice> GetGraphicsDevice() { return m_GraphicsDevice; }
-            inline const std::shared_ptr<ResourceManager> GetResourceManager() { return m_ResourceManager; }
 
         private:
             std::shared_ptr<Window> m_Window;
             std::shared_ptr<GraphicsDevice> m_GraphicsDevice;
-            std::shared_ptr<ResourceManager> m_ResourceManager;
 
             bool m_Running;
             Clock m_AppClock;
