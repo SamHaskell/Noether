@@ -23,6 +23,7 @@ namespace Noether {
             virtual void Clear(ClearFlags flags) const = 0;
 
             virtual void SetDepthTesting(bool isActive) const = 0;
+            virtual void SetBlending(bool isActive) const = 0;
             virtual void SetViewport(i32 width, i32 height) const = 0;
             virtual void SetVSync(bool isActive) const = 0;
 

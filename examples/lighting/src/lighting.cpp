@@ -1,8 +1,8 @@
-#include "emmy.hpp"
+#include "lighting.hpp"
 #include "imgui.h"
 
 namespace Noether {
-    void Editor::Initialise() {
+    void LightingExample::Initialise() {
         GetGraphicsDevice()->SetVSync(false);
         auto window = GetMainWindow();
         m_MultisampledFramebuffer = FrameBuffer::Create(window->GetBackbufferWidth(), window->GetBackbufferHeight(), 4);
@@ -175,11 +175,11 @@ namespace Noether {
         };
     }
 
-    void Editor::Shutdown() {
+    void LightingExample::Shutdown() {
 
     }
 
-    void Editor::Update(f64 dt) {
+    void LightingExample::Update(f64 dt) {
         m_DebugData.FrameTime = dt;
         m_UnlitMaterial->Color = m_PointLight.Color;
 
@@ -224,7 +224,7 @@ namespace Noether {
         };
     }
 
-    void Editor::Render() {
+    void LightingExample::Render() {
 
         // Shadow-mapping prepass for the directional light
 
@@ -370,7 +370,7 @@ namespace Noether {
         GetGraphicsDevice()->DrawVertexArray(m_QuadVA);
     }
 
-    void Editor::DrawGUI() {
+    void LightingExample::DrawGUI() {
         ImGui::BeginMainMenuBar();
         {
             ImGui::Text("Testing!");
@@ -429,7 +429,7 @@ namespace Noether {
         ImGui::End();
     }
 
-    void Editor::OnEvent(Event& e) {
+    void LightingExample::OnEvent(Event& e) {
         switch (e.Type) {
             case Event::Type::WindowBackbufferSize:
             {

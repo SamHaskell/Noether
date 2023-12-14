@@ -5,20 +5,20 @@
 #include "graphics/textures.hpp"
 
 namespace Noether {
-    class MaterialBase {
+    class Material {
         public:
             virtual void Apply() = 0;
 
         protected:
-            MaterialBase(const std::shared_ptr<Shader>& shader) : m_Shader(shader) {}
-            virtual ~MaterialBase() = default;
+            Material(const std::shared_ptr<Shader>& shader) : m_Shader(shader) {}
+            virtual ~Material() = default;
 
             std::shared_ptr<Shader> m_Shader;
     };
 
     // TODO: Look at pulling material types out into some material property block kind of thing
 
-    class MaterialLit : public MaterialBase {
+    class MaterialLit : public Material {
         public:
             static std::shared_ptr<MaterialLit> Create(const std::shared_ptr<Shader>& shader);
             MaterialLit(const std::shared_ptr<Shader>& shader);
@@ -34,7 +34,7 @@ namespace Noether {
             std::shared_ptr<Texture2D> NormalMap;
     };
 
-    class MaterialUnlit : public MaterialBase {
+    class MaterialUnlit : public Material {
         public:
             static std::shared_ptr<MaterialUnlit> Create(const std::shared_ptr<Shader>& shader);
             MaterialUnlit(const std::shared_ptr<Shader>& shader);

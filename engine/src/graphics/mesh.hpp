@@ -28,6 +28,8 @@ namespace Noether {
         public:
             Mesh(const std::vector<Vertex>& vertices, const std::vector<Index>& indices, const std::vector<SubMesh>& subMeshes);
             ~Mesh();
+            Mesh(const Mesh& mesh) = delete;
+            Mesh& operator=(const Mesh&) = delete;
 
             static std::shared_ptr<Mesh> Load(const std::string& path);
             static std::shared_ptr<Mesh> Create(const std::vector<Vertex>& vertices, const std::vector<Index>& indices, const Mat4& transform);

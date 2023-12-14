@@ -1,27 +1,29 @@
 #shader vertex
 #version 410 core
 
-layout(location = 0) in vec3 a_Position;
+layout (location = 0) in vec2 a_Position;
+layout (location = 1) in vec2 a_TexCoord;
 
-out vec3 v_TexCoord;
+out vec2 v_TexCoord;
 
 uniform mat4 u_ViewToProjectionMatrix;
-uniform mat4 u_WorldToViewMatrix;
 
 void main() {
-    v_TexCoord = a_Position;
-    gl_Position = u_ViewToProjectionMatrix * mat4(mat3(u_WorldToViewMatrix)) * vec4(a_Position, 1.0);
+    gl_Position = u_ViewToProjectionMatrix * vec4(a_Position, 0.0, 1.0);
+    v_TexCoord = a_TexCoord;
 }
 
 #shader fragment
 #version 410 core
 
-in vec3 v_TexCoord;
+in vec2 v_TexCoord;
 
 out vec4 f_Color;
 
-uniform samplerCube u_CubeMap;
+uniform sampler2D u_GlyphTex;
+uniform vec3 u_TextColor;
 
 void main() {
-    f_Color = texture(u_CubeMap, v_TexCoord);
+    vec4 glyphSample = vec4(1.0, 1.0, 1.0, texture(u_GlyphTex, v_TexCoord).r);
+    f_Color = vec4(u_TextColor, 1.0) * glyphSample;
 }
