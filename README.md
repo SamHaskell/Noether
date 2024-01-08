@@ -8,6 +8,8 @@ I've decided to take another shot at engine programming now that I have a slight
 
 I have chosen to roll my own maths library here, as opposed to running with something like glm. I'm picky about naming conventions and operator overloading, and I need a way to flex my maths brain again, so that's something I will be developing alongside this project. I will also be looking to use this framework as a basis to develop my own first attempt at a physics engine. Again, I'm not expecting to turn around and create something like Jolt, but I firmly believe that opening up the black box and getting your hands dirty is the best way to develop an intuition for these kinds of things. 
 
+![A Noether Scene](./res/lighting.png)
+
 ## Features
 
 * Rendering
